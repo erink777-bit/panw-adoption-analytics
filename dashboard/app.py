@@ -27,8 +27,8 @@ FQ = f"`{PROJECT}.{DATASET}"
 
 STATE_COLORS = {
     "Value Realized": "#1E8E3E", "Developing": "#F9AB00", "Onboarding Stall": "#F9AB00",
-    "Shelfware Risk": "#E8710A", "Churn Signal": "#D93025", "Lapsed": "#5F6368",
-    "At Risk": "#E8710A", "Critical": "#B3261E", "Grace Period": "#9AA0A6",
+    "Shelfware Risk": "#E8710A", "Churn Signal": "#A8574E", "Lapsed": "#5F6368",
+    "At Risk": "#C77E76", "Critical": "#B36259", "Grace Period": "#9AA0A6",
 }
 STATE_ORDER = ["Value Realized", "Developing", "Grace Period", "Onboarding Stall",
                "Shelfware Risk", "Churn Signal", "Lapsed", "At Risk", "Critical"]
@@ -357,7 +357,7 @@ with tab_p:
     prevq = kpis_for(get_month_data(prevq_m, segs, regs, plats)) if prevq_m else None
     total_arr, at_risk = cur["arr"], cur["at_risk"]
 
-    GOOD, BAD, FLAT = "#1E8E3E", "#D93025", "#6b7690"
+    GOOD, BAD, FLAT = "#1E8E3E", "#A8574E", "#6b7690"
 
     def _delta(diff, good_when_down=False, fmt="money", suffix=" MoM"):
         if diff is None:
@@ -395,12 +395,12 @@ with tab_p:
         f"<div style='font-size:12px;color:#6b7690'>{cur['customers']} customers</div>")
 
     risk_card = _card(
-        f"<div style='{_lab}'>ARR at Risk</div><div style='{_big};color:#B3261E'>{money(at_risk)}</div>"
+        f"<div style='{_lab}'>ARR at Risk</div><div style='{_big};color:#A8574E;font-weight:600'>{money(at_risk)}</div>"
         + _delta(at_risk - prev["at_risk"] if prev else None, good_when_down=True),
         bg="#fdecec", border="#f2c4c4")
 
     crisk_card = _card(
-        f"<div style='{_lab}'>Customers at Risk</div><div style='{_big};color:#B3261E'>{cur['cust_risk']}</div>"
+        f"<div style='{_lab}'>Customers at Risk</div><div style='{_big};color:#A8574E;font-weight:600'>{cur['cust_risk']}</div>"
         + _delta(cur["cust_risk"] - prev["cust_risk"] if prev else None, good_when_down=True, fmt="count"),
         bg="#fdecec", border="#f2c4c4")
 
@@ -540,7 +540,7 @@ with tab_c:
     _a_acc = pd.concat([risk_rows["cust_id"], exp_rows["cust_id"]]).nunique()
     st.markdown(
         "<div style='display:flex;gap:10px;align-items:stretch;margin-bottom:12px'>"
-        + _card(f"<div style='{_lab}'>ARR at Risk</div><div style='{_big};color:#B3261E'>{money(_r_arr)}</div>"
+        + _card(f"<div style='{_lab}'>ARR at Risk</div><div style='{_big};color:#A8574E;font-weight:600'>{money(_r_arr)}</div>"
                 f"<div style='font-size:12px;color:#6b7690'>{_r_acc} accounts</div>",
                 bg="#fdecec", border="#f2c4c4")
         + _card(f"<div style='{_lab}'>ARR to Expand (upsell)</div><div style='{_big};color:#8A6D00'>{money(_e_arr)}</div>"
@@ -587,7 +587,7 @@ with tab_c:
                  "Upsell": "background-color:#F9EFD4;color:#8A6D1F;font-weight:600"}
     styw = style_scores(pdisp, vrs_cols=["VRS"], sig_cols=_sig, money_cols=["Total ARR", "ARR at risk"])
     styw = styw.map(lambda v: _PLAY_CSS.get(v, ""), subset=["Play"])
-    styw = styw.map(lambda _v: "color:#B3261E;font-weight:700", subset=["ARR at risk"])
+    styw = styw.map(lambda _v: "color:#A8574E;font-weight:600", subset=["ARR at risk"])
     st.dataframe(styw, use_container_width=True, hide_index=True)
 
     st.markdown("---")
@@ -640,7 +640,7 @@ with tab_c:
         figl = px.line(ser, x="month", y="lur", markers=True, color_discrete_sequence=["#FA582D"])
         figl.add_hline(y=1.0, line_dash="dot", line_color="#1E8E3E",
                        annotation_text="full · 1.0", annotation_position="top left")
-        figl.add_hline(y=1.2, line_dash="dot", line_color="#D93025",
+        figl.add_hline(y=1.2, line_dash="dot", line_color="#B08480",
                        annotation_text="overage · 1.2", annotation_position="top left")
         figl.update_layout(title=dict(text=f"{prod_pick} — License Utilization by month",
                                       font=dict(size=15, color="#1b2338")),
@@ -700,7 +700,7 @@ with tab_prod:
             "<span style='font-size:12px;color:#6b7690;font-weight:400'>VRS</span></div>"
             f"<div style='font-size:12.5px;color:#6b7690;margin:2px 0 9px;white-space:nowrap'>ARR "
             f"<b style='color:#1b2338'>{money(_arr)}</b> &nbsp; At risk "
-            f"<b style='color:#B3261E'>{money(_rk)}</b> ({_pct:.0f}%)</div>"
+            f"<b style='color:#A8574E;font-weight:600'>{money(_rk)}</b> ({_pct:.0f}%)</div>"
             "<div style='height:6px;border-radius:3px;background:#eef1f6;overflow:hidden'>"
             f"<div style='width:{_v:.0f}%;height:100%;background:#FA582D'></div></div></div>")
     st.markdown(f"<div style='display:flex;gap:10px;margin-bottom:12px'>{_cards}</div>",
@@ -751,7 +751,7 @@ with tab_prod:
     tblp = view.rename(columns={"model": "Product model", "ARR_at_risk": "ARR at risk"})[
         ["Product model", "Platform", "VRS"] + _psig + ["ARR", "ARR at risk", "Anomalies"]]
     styp = style_scores(tblp, vrs_cols=["VRS"], sig_cols=_psig, money_cols=["ARR", "ARR at risk"])
-    styp = styp.map(lambda _v: "color:#B3261E;font-weight:700", subset=["ARR at risk"])
+    styp = styp.map(lambda _v: "color:#A8574E;font-weight:600", subset=["ARR at risk"])
     evp = st.dataframe(styp, use_container_width=True, hide_index=True,
                        on_select="rerun", selection_mode="single-row", key=f"pt_{choice}")
 
