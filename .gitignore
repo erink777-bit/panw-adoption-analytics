@@ -3,3 +3,4 @@ __pycache__/
 .DS_Store
 *.tmp
 .~lock.*
+push_to_github.bat
