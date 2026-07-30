@@ -245,18 +245,8 @@ def _sig_bg(v):
 # canonical band palette — one hue per band, used everywhere on the Portfolio tab
 BAND_FILL = {"Value Realized": "#7CB08A", "Developing": "#E7C566",
              "At Risk": "#E8A06B", "Critical": "#DC8B80"}          # solid (charts)
-BAND_TINT = {"Value Realized": "#E5F0E8", "Developing": "#F9EFD4",
-             "At Risk": "#FAE7DA", "Critical": "#F9E2DF"}          # light (cells, pills)
-BAND_TEXT = {"Value Realized": "#3D7A52", "Developing": "#8A6D1F",
-             "At Risk": "#B25E24", "Critical": "#B0433A"}          # readable text on tint
 BAND_PLAIN = {"Value Realized": "#5E9A6E", "Developing": "#C09A45",
               "At Risk": "#C77E76", "Critical": "#B36259"}         # plain in-table label text
-
-
-def _band_bg(v):
-    if v in BAND_TINT:
-        return f"background-color: {BAND_TINT[v]}; color: #3D465C; font-weight: 600"
-    return ""
 
 
 def band_of(v):
@@ -350,11 +340,11 @@ if os.path.exists(_logo):
     with open(_logo, "rb") as _f:
         _logo_b64 = base64.b64encode(_f.read()).decode()
     _logo_html = (
-        f"<img src='data:image/png;base64,{_logo_b64}' style='width:150px'/>"
+        f"<img src='data:image/png;base64,{_logo_b64}' style='width:175px'/>"
         "<div style='width:1px;height:40px;background:#E3E1DA'></div>"
     )
 st.markdown(
-    "<div style='display:flex;align-items:center;gap:18px'>"
+    "<div style='display:flex;align-items:center;gap:14px'>"
     + _logo_html +
     "<div>"
     "<div style='font-size:26px;font-weight:700;color:#1B2338;white-space:nowrap'>"
@@ -367,7 +357,7 @@ st.markdown(
     "</div>", unsafe_allow_html=True)
 
 st.markdown("<style>div[data-testid='stVerticalBlockBorderWrapper']"
-            "{background:#ffffff;border:1px solid #E9E7E1;border-radius:12px}</style>",
+            "{background:#ffffff;border:1px solid #E3E1DA;border-radius:12px}</style>",
             unsafe_allow_html=True)
 
 PLAT_LABEL = {"hardware_ngfw": "Hardware NGFW", "software_ngfw": "Software NGFW",
@@ -392,7 +382,12 @@ with tab_p:
     prevq = kpis_for(get_month_data(prevq_m, segs, regs, plats)) if prevq_m else None
     total_arr, at_risk = cur["arr"], cur["at_risk"]
 
-    DELTA_GREY = "#8A93A6"          # item 9: ALL deltas neutral slate grey
+    # ---- one type scale, used everywhere on this page ----
+    DELTA_GREY = "#8A93A6"
+    _lab = "font-size:12px;font-weight:600;color:#6B7690;white-space:nowrap"      # card label
+    _big = "font-size:24px;font-weight:700;color:#1B2338"                          # card value
+    _sub = "font-size:12px;color:#6B7690"                                          # secondary line
+    _ttl = "font-size:15px;font-weight:700;color:#1B2338"                          # section title
 
     def _delta(diff, fmt="money", suffix=" MoM", extra=""):
         if diff is None:
@@ -406,12 +401,9 @@ with tab_p:
         return (f"<div style='flex:1;background:{bg};border:1px solid {border};border-radius:12px;"
                 f"padding:12px 16px;min-width:0'>{inner}</div>")
 
-    _lab = "font-size:12px;font-weight:600;color:#6B7690;white-space:nowrap"
-    _big = "font-size:24px;font-weight:600;color:#3D465C"
-
-    # ---- item 10: gauge card for Portfolio VRS (SVG arc, mockup-style) ----
+    # ---- KPI strip: five uniform white cards ----
     p = max(0.0, min(100.0, cur["vrs"]))
-    _arclen = 131.9   # length of the 42px-radius semicircle path
+    _arclen = 131.9
     gauge = (
         "<svg width='96' height='56' viewBox='0 0 100 56'>"
         "<path d='M 8 50 A 42 42 0 0 1 92 50' fill='none' stroke='#F3E6DF'"
@@ -422,144 +414,137 @@ with tab_p:
     vrs_card = _card(
         "<div style='display:flex;gap:14px;align-items:center'>"
         f"<div style='flex:none;text-align:center'>{gauge}"
-        f"<div style='font-size:21px;font-weight:700;color:#1B2338;margin-top:-26px'>{p:.1f}%</div></div>"
+        f"<div style='font-size:24px;font-weight:700;color:#1B2338;margin-top:-28px'>{p:.1f}%</div></div>"
         f"<div><div style='{_lab}'>Portfolio VRS</div>"
         + _delta(cur["vrs"] - prev["vrs"] if prev else None, fmt="pct")
         + _delta(cur["vrs"] - prevq["vrs"] if prevq else None, fmt="pct", suffix=" QoQ")
         + "</div></div>")
-
     arr_card = _card(
         f"<div style='{_lab}'>Total ARR</div><div style='{_big}'>{money(total_arr)}</div>"
-        f"<div style='font-size:12px;color:#6b7690'>{cur['customers']} customers</div>")
-
-    # item 26: pastel risk / expansion cards; item 9: values 24px/600, dusty & gold
+        f"<div style='{_sub}'>{cur['customers']} customers</div>")
     risk_card = _card(
-        f"<div style='{_lab}'>ARR at Risk</div>"
-        f"<div style='{_big}'>{money(at_risk)}</div>"
+        f"<div style='{_lab}'>ARR at Risk</div><div style='{_big}'>{money(at_risk)}</div>"
         + _delta(at_risk - prev["at_risk"] if prev else None))
-
     crisk_card = _card(
-        f"<div style='{_lab}'>Customers at Risk</div>"
-        f"<div style='{_big}'>{cur['cust_risk']}</div>"
+        f"<div style='{_lab}'>Customers at Risk</div><div style='{_big}'>{cur['cust_risk']}</div>"
         + _delta(cur["cust_risk"] - prev["cust_risk"] if prev else None, fmt="count"))
-
-    exp_extra = f" · {cur['exp_cust']} accounts"
-    exp_delta = _delta(cur["exp_arr"] - prev["exp_arr"] if prev else None, extra=exp_extra)
+    exp_delta = _delta(cur["exp_arr"] - prev["exp_arr"] if prev else None,
+                       extra=f" · {cur['exp_cust']} accounts")
     if not exp_delta:
-        exp_delta = f"<div style='font-size:12px;color:#6b7690'>{cur['exp_cust']} accounts</div>"
+        exp_delta = f"<div style='{_sub}'>{cur['exp_cust']} accounts</div>"
     exp_card = _card(
-        f"<div style='{_lab}'>Expansion ARR</div>"
-        f"<div style='{_big}'>{money(cur['exp_arr'])}</div>"
+        f"<div style='{_lab}'>Expansion ARR</div><div style='{_big}'>{money(cur['exp_arr'])}</div>"
         + exp_delta)
-
-    st.markdown("<div style='display:flex;gap:10px;align-items:stretch;margin-bottom:8px'>"
+    st.markdown("<div style='display:flex;gap:10px;align-items:stretch'>"
                 + vrs_card + arr_card + risk_card + crisk_card + exp_card + "</div>",
                 unsafe_allow_html=True)
 
-    # ---- item 11: trimmed collapsible band reference ----
-    with st.expander("VRS ranges — what the bands mean"):
-        _ranges = [
-            ("Value Realized", "70–100%", "All four signals healthy — strong utilization plus broad, sustained adoption."),
-            ("Developing", "50–69%", "Partial value — solid utilization but thin feature adoption or patchy usage."),
-            ("At Risk", "30–49%", "Largely unrealized — several signals weak at once."),
-            ("Critical", "0–29%", "Near-dormant — shelfware or a collapsed / lapsed account."),
-        ]
-        _rrows = "".join(
-            f"<tr style='border-bottom:1px solid #eef1f6'>"
-            f"<td style='padding:8px 10px;color:{BAND_PLAIN[b]};font-weight:600;white-space:nowrap'>{b}</td>"
-            f"<td style='padding:8px 10px;font-weight:700;color:#1B2338;white-space:nowrap'>{rng}</td>"
-            f"<td style='padding:8px 10px;color:#6B7690'>{mean}</td></tr>"
-            for b, rng, mean in _ranges)
-        _rhdr = "".join(f"<th style='text-align:left;padding:6px 10px;color:#6b7690;font-size:12px;"
-                        f"font-weight:600;border-bottom:1px solid #e2e7f1'>{h}</th>"
-                        for h in ["Band", "Range", "Meaning"])
-        st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
-                    f"<thead><tr>{_rhdr}</tr></thead><tbody>{_rrows}</tbody></table>",
-                    unsafe_allow_html=True)
+    # ---- quiet band key ----
+    _bands_strip = " &nbsp;·&nbsp; ".join(
+        f"<span style='white-space:nowrap'><span style='color:{BAND_PLAIN[b]};font-weight:600'>{b}</span>"
+        f" <span style='color:#6B7690'>{rng}</span></span>"
+        for b, rng in [("Value Realized", "70–100%"), ("Developing", "50–69%"),
+                       ("At Risk", "30–49%"), ("Critical", "0–29%")])
+    st.markdown(
+        "<div style='font-size:12px;margin:10px 0 4px;display:flex;gap:14px;align-items:center;flex-wrap:wrap'>"
+        "<span style='font-size:11px;font-weight:700;color:#6B7690;letter-spacing:1px'>VRS BANDS</span>"
+        f"<span>{_bands_strip}</span></div>", unsafe_allow_html=True)
 
+    # ---- two chart cards ----
     tr = get_trend(segs, regs, plats)
-    bt = get_band_trend(segs, regs, plats)
     tr["month"] = pd.to_datetime(tr["month"].astype(str)).dt.strftime("%b '%y")
+    bt = get_band_trend(segs, regs, plats)
+    _BANDS = ["Value Realized", "Developing", "At Risk", "Critical"]
+    MIX_FILL = {"Value Realized": "#C9DFCF", "Developing": "#F0E5C4",
+                "At Risk": "#E8C5A8", "Critical": "#DCA89E"}
+    SPARK = {"Value Realized": "#7CAE8A", "Developing": "#D9BC6A",
+             "At Risk": "#D89B76", "Critical": "#C77E76"}
+    d_now = df.copy()
+    d_now["band"] = d_now["vrs"].apply(band_of)
+    cur_band = d_now.groupby("band")["arr"].sum().reindex(_BANDS).fillna(0)
+    hist = bt.copy()
+    hist["month"] = hist["month"].astype(str).str[:7]
+    piv = (hist.pivot_table(index="month", columns="band", values="arr", aggfunc="sum")
+           .reindex(columns=_BANDS).fillna(0))
+    shares = (piv.div(piv.sum(axis=1), axis=0) * 100).tail(12)
+    sh_now = shares.loc[sel_month] if sel_month in shares.index else shares.iloc[-1]
+    sh_q = shares.loc[prevq_m] if (prevq_m and prevq_m in shares.index) else None
+
+    def _sparksvg(vals, color):
+        if len(vals) < 2:
+            return ""
+        w, h, pad = 110, 30, 3
+        lo, hi = min(vals), max(vals)
+        rng = (hi - lo) or 1.0
+        pts = " ".join(f"{pad + i * (w - 2 * pad) / (len(vals) - 1):.1f},"
+                       f"{h - pad - (v - lo) / rng * (h - 2 * pad):.1f}"
+                       for i, v in enumerate(vals))
+        return (f"<svg width='{w}' height='{h}' viewBox='0 0 {w} {h}'>"
+                f"<polyline points='{pts}' fill='none' stroke='{color}' stroke-width='1.6'"
+                f" stroke-linejoin='round' stroke-linecap='round'/></svg>")
 
     t1, t2 = st.columns(2)
-    with t1, st.container(border=True, height=345):
-        # ---- item 12: tight-zoom VRS trend, salmon line, sage threshold only ----
-        st.markdown("**Portfolio VRS trend**")
-        figt = px.line(tr, x="month", y="vrs", markers=True, color_discrete_sequence=["#E8B0A3"])
+    with t1, st.container(border=True, height=298):
+        st.markdown(f"<div style='{_ttl}'>Portfolio VRS trend</div>", unsafe_allow_html=True)
+        figt = px.line(tr, x="month", y="vrs", markers=True, color_discrete_sequence=["#FA582D"])
         figt.add_hline(y=70, line_dash="dot", line_color="#8FB79A",
                        annotation_text="Value Realized · 70%", annotation_position="top left",
                        annotation_font_color="#8FB79A")
-        figt.update_layout(height=262, xaxis_type="category",
+        figt.update_layout(height=232, xaxis_type="category",
                            yaxis=dict(range=[63, 72], dtick=2),
                            yaxis_title="Portfolio VRS (%)", yaxis_ticksuffix="%", xaxis_title="",
                            margin=dict(t=10, b=10))
         st.plotly_chart(dechrome(figt), width="stretch", config=PLOTLY_CONFIG)
-
-    with t2, st.container(border=True, height=345):
-        # ---- item 13: "Where the ARR sits today" — 100% mix bar + band grid ----
-        _BANDS = ["Value Realized", "Developing", "At Risk", "Critical"]
-        MIX_FILL = {"Value Realized": "#C9DFCF", "Developing": "#F0E5C4",
-                    "At Risk": "#EFD6C1", "Critical": "#EAC9C3"}
-        SPARK = {"Value Realized": "#7CAE8A", "Developing": "#D9BC6A",
-                 "At Risk": "#D89B76", "Critical": "#C77E76"}
-
-        d_now = df.copy()
-        d_now["band"] = d_now["vrs"].apply(band_of)
-        cur_band = d_now.groupby("band")["arr"].sum().reindex(_BANDS).fillna(0)
-        # reconciliation by construction: bands sum to Total ARR; At Risk + Critical = ARR at Risk
-
-        hist = bt.copy()
-        hist["month"] = hist["month"].astype(str).str[:7]
-        piv = (hist.pivot_table(index="month", columns="band", values="arr", aggfunc="sum")
-               .reindex(columns=_BANDS).fillna(0))
-        shares = (piv.div(piv.sum(axis=1), axis=0) * 100).tail(12)
-        sh_now = shares.loc[sel_month] if sel_month in shares.index else shares.iloc[-1]
-        sh_q = shares.loc[prevq_m] if (prevq_m and prevq_m in shares.index) else None
-
-        st.markdown("**Where the ARR sits today**")
-        _mix = "".join(f"<div style='width:{cur_band[b] / total_arr * 100:.2f}%;"
-                       f"background:{MIX_FILL[b]}'></div>" for b in _BANDS)
-        st.markdown(f"<div style='display:flex;height:22px;border-radius:999px;overflow:hidden;"
+    with t2, st.container(border=True, height=298):
+        st.markdown(f"<div style='{_ttl}'>Where the ARR sits today</div>", unsafe_allow_html=True)
+        def _mixseg(b):
+            _pct = cur_band[b] / total_arr * 100
+            _txt = ""
+            if _pct >= 18:
+                _txt = f"{b} · {_pct:.0f}%"
+            elif _pct >= 7:
+                _txt = f"{_pct:.0f}%"
+            return (f"<div style='width:{_pct:.2f}%;background:{MIX_FILL[b]};display:flex;"
+                    f"align-items:center;justify-content:center;font-size:11px;font-weight:600;"
+                    f"color:{BAND_PLAIN[b]};white-space:nowrap;overflow:hidden'>{_txt}</div>")
+        _mix = "".join(_mixseg(b) for b in _BANDS)
+        st.markdown(f"<div style='display:flex;gap:2px;height:22px;border-radius:999px;overflow:hidden;"
                     f"margin:4px 0 14px'>{_mix}</div>", unsafe_allow_html=True)
-
-        def _sparksvg(vals, color):
-            if len(vals) < 2:
-                return ""
-            w, h, pad = 110, 30, 3
-            lo, hi = min(vals), max(vals)
-            rng = (hi - lo) or 1.0
-            pts = " ".join(f"{pad + i * (w - 2 * pad) / (len(vals) - 1):.1f},"
-                           f"{h - pad - (v - lo) / rng * (h - 2 * pad):.1f}"
-                           for i, v in enumerate(vals))
-            return (f"<svg width='{w}' height='{h}' viewBox='0 0 {w} {h}'>"
-                    f"<polyline points='{pts}' fill='none' stroke='{color}' stroke-width='1.6'"
-                    f" stroke-linejoin='round' stroke-linecap='round'/></svg>")
-
-        _cells = ""
+        _cells, _empty = "", []
         for _b in _BANDS:
+            if cur_band[_b] <= 0:
+                _empty.append(_b)
+                continue
             _dhtml = "<div style='font-size:12px;font-weight:600;color:#6B7690'>&nbsp;</div>"
             if sh_q is not None:
                 _d = sh_now[_b] - sh_q[_b]
-                _ar = "▲" if _d > 0 else ("▼" if _d < 0 else "▬")
-                _dhtml = f"<div style='font-size:12px;font-weight:600;color:#6B7690'>{_ar} {abs(_d):.1f}pt</div>"
+                if abs(_d) < 0.05:
+                    _dhtml = "<div style='font-size:12px;color:#B7BDC9'>no change</div>"
+                else:
+                    _ar = "▲" if _d > 0 else "▼"
+                    _dhtml = f"<div style='font-size:12px;font-weight:600;color:#6B7690'>{_ar} {abs(_d):.1f}pt</div>"
+            _p = cur_band[_b] / total_arr * 100
+            _ptxt = f"{_p:.1f}%" if _p < 1 else f"{_p:.0f}%"
             _cells += (
-                "<div style='flex:1;background:#ffffff;border:1px solid #ECEAE4;border-radius:10px;"
+                "<div style='flex:1;background:#ffffff;border:1px solid #E3E1DA;border-radius:10px;"
                 "padding:10px 12px;min-width:0'>"
-                f"<div style='font-size:12.5px;font-weight:600;color:{BAND_PLAIN[_b]};white-space:nowrap'>{_b}</div>"
+                f"<div style='font-size:12px;font-weight:600;color:{BAND_PLAIN[_b]};white-space:nowrap'>{_b}</div>"
                 f"<div style='font-size:20px;font-weight:700;color:#1B2338;margin-top:2px'>{money(cur_band[_b])}</div>"
-                f"<div style='font-size:12px;color:#6b7690;white-space:nowrap'>{cur_band[_b] / total_arr * 100:.0f}% of ARR</div>"
+                f"<div style='{_sub};white-space:nowrap'>{_ptxt} of ARR</div>"
                 + _dhtml
-                + f"<div style='margin-top:6px'>{_sparksvg(list(shares[_b]), SPARK[_b])}</div>"
-                "<div style='font-size:11px;color:#9AA0A6;margin-top:2px'>12-mo share</div></div>")
+                + f"<div style='margin-top:6px'>{_sparksvg(list(shares[_b]), SPARK[_b])}</div></div>")
         st.markdown(f"<div style='display:flex;gap:12px;align-items:stretch'>{_cells}</div>",
                     unsafe_allow_html=True)
-        st.caption("Δ = change in share vs last quarter")
+        _foot = "Δ = change in share vs last quarter · sparklines show 12-mo share"
+        if _empty:
+            _foot += " · no ARR currently in: " + ", ".join(_empty)
+        st.caption(_foot)
 
+    # ---- top movers ----
     with st.container(border=True):
-        # ---- item 14: Top movers this month ----
-        st.markdown("**Top movers this month**")
-        st.caption("Largest VRS swings, worst first.")
-
+        st.markdown(f"<div style='{_ttl}'>Top movers this month</div>"
+                    f"<div style='{_sub};margin-bottom:6px'>Largest VRS swings — accounts needing action first.</div>",
+                    unsafe_allow_html=True)
         if prev is None:
             st.info("No prior month in range — movers need a month-over-month comparison.")
         else:
@@ -569,7 +554,6 @@ with tab_p:
             cv_prev = dfp.groupby("cust_id").apply(wvrs, include_groups=False).rename("vrs_prev").reset_index()
             mv = cv_cur.merge(cv_prev, on="cust_id", how="inner")
             mv["delta"] = mv["vrs"] - mv["vrs_prev"]
-            mv = mv.reindex(mv["delta"].abs().sort_values(ascending=False).index).head(6)
 
             def _play_of(cid):
                 g = df[df["cust_id"] == cid]
@@ -581,24 +565,29 @@ with tab_p:
                     return f"Upsell · Sales (overage {g.loc[g['flag_expansion'], 'lur'].max():.0%})"
                 return "— monitor"
 
+            mv["play"] = mv["cust_id"].apply(_play_of)
+            mv["_act"] = mv["play"] != "— monitor"
+            mv = mv.reindex(mv["delta"].abs().sort_values(ascending=False).index)
+            mv = pd.concat([mv[mv["_act"]], mv[~mv["_act"]]]).head(7)
+
             _rows = ""
             for _, r in mv.iterrows():
                 band = band_of(r["vrs"])
                 vcol = "#A8574E" if r["vrs"] < 50 else "#1B2338"
                 darr = "▼" if r["delta"] < 0 else ("▲" if r["delta"] > 0 else "▬")
                 _rows += (
-                    f"<tr style='border-bottom:1px solid #eef1f6'>"
+                    f"<tr style='border-bottom:1px solid #F0EEE8'>"
                     f"<td style='padding:9px 10px;font-weight:500;color:#3D465C'>{r['cust_name']}</td>"
                     f"<td style='padding:9px 10px;font-weight:700;color:{vcol}'>{r['vrs']:.0f}%</td>"
                     f"<td style='padding:9px 10px;font-weight:500;color:{DELTA_GREY}'>{darr} {abs(r['delta']):.0f}</td>"
                     f"<td style='padding:9px 10px;font-weight:500;color:#3D465C'>{money(r['arr'])}</td>"
                     f"<td style='padding:9px 10px;font-weight:500;color:{BAND_PLAIN[band]};"
                     f"white-space:nowrap'>{band}</td>"
-                    f"<td style='padding:9px 10px;color:#6B7690'>{_play_of(r['cust_id'])}</td></tr>")
-            _hdr = "".join(f"<th style='text-align:left;padding:8px 10px;color:#6b7690;font-size:12px;"
-                           f"font-weight:600;border-bottom:1px solid #e2e7f1'>{h}</th>"
+                    f"<td style='padding:9px 10px;color:#6B7690'>{r['play']}</td></tr>")
+            _hdr = "".join(f"<th style='text-align:left;padding:8px 10px;color:#6B7690;font-size:12px;"
+                           f"font-weight:600;border-bottom:1px solid #E3E1DA'>{h}</th>"
                            for h in ["Customer", "VRS", "Δ MoM", "ARR", "State", "Recommended play"])
-            st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:14px'>"
+            st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
                         f"<thead><tr>{_hdr}</tr></thead><tbody>{_rows}</tbody></table>",
                         unsafe_allow_html=True)
 
@@ -631,11 +620,11 @@ with tab_c:
     st.markdown(
         "<div style='display:flex;gap:10px;align-items:stretch;margin-bottom:12px'>"
         + _card(f"<div style='{_lab}'>ARR at Risk</div><div style='{_big}'>{money(_r_arr)}</div>"
-                f"<div style='font-size:12px;color:#6b7690'>{_r_acc} accounts</div>")
-        + _card(f"<div style='{_lab}'>ARR to Expand (upsell)</div><div style='{_big}'>{money(_e_arr)}</div>"
-                f"<div style='font-size:12px;color:#6b7690'>{_e_acc} accounts</div>")
+                f"<div style='font-size:12px;color:#6B7690'>{_r_acc} accounts</div>")
+        + _card(f"<div style='{_lab}'>Expansion ARR</div><div style='{_big}'>{money(_e_arr)}</div>"
+                f"<div style='font-size:12px;color:#6B7690'>{_e_acc} accounts</div>")
         + _card(f"<div style='{_lab}'>Accounts Needing Action</div><div style='{_big}'>{_a_acc}</div>"
-                f"<div style='font-size:12px;color:#6b7690'>of {df['cust_id'].nunique()} customers</div>")
+                f"<div style='font-size:12px;color:#6B7690'>of {df['cust_id'].nunique()} customers</div>")
         + "</div>", unsafe_allow_html=True)
 
     # ---- Recommended plays — by account ----
@@ -649,126 +638,142 @@ with tab_c:
             return "Upsell", "Sales"
         return None, None
 
-    _pl, _pr = st.columns([2.4, 1.6], vertical_alignment="center")
-    with _pl:
-        st.markdown("**Recommended plays — by account**")
-    with _pr:
-        _popts = ["All", "Activate", "Win back", "Upsell"]
-        if hasattr(st, "pills"):
-            pchoice = st.pills("Play filter", _popts, default="All", label_visibility="collapsed")
-        else:
-            pchoice = st.radio("Play filter", _popts, horizontal=True, label_visibility="collapsed")
-        pchoice = pchoice or "All"
+    with st.container(border=True):
+        _pl, _pr = st.columns([2.4, 1.6], vertical_alignment="center")
+        with _pl:
+            st.markdown(f"<div style='{_ttl}'>Recommended plays — by account</div>", unsafe_allow_html=True)
+        with _pr:
+            _popts = ["All", "Activate", "Win back", "Upsell"]
+            if hasattr(st, "pills"):
+                pchoice = st.pills("Play filter", _popts, default="All", label_visibility="collapsed")
+            else:
+                pchoice = st.radio("Play filter", _popts, horizontal=True, label_visibility="collapsed")
+            pchoice = pchoice or "All"
 
-    _pids = pd.concat([risk_rows["cust_id"], exp_rows["cust_id"]]).unique()
-    prow = cust[cust["cust_id"].isin(_pids)].copy()
-    prow[["Play", "Owner"]] = prow["cust_id"].apply(lambda c: pd.Series(_play_row(c)))
-    prow = prow.dropna(subset=["Play"])
-    if pchoice != "All":
-        prow = prow[prow["Play"] == pchoice]
-    prow = prow.sort_values(["ARRatrisk", "TotalARR"], ascending=False)
-    pdisp = prow.rename(columns={"cust_name": "Customer", "segment": "Segment",
-                                 "TotalARR": "Total ARR", "ARRatrisk": "ARR at risk"})[
-        ["Customer", "Segment", "Play", "Owner", "VRS"] + _sig + ["Total ARR", "ARR at risk"]]
-    _PLAY_CSS = {"Activate": "color:#C09A45;font-weight:500",
-                 "Win back": "color:#B36259;font-weight:500",
-                 "Upsell": "color:#5E9A6E;font-weight:500"}
-    styw = style_scores(pdisp, vrs_cols=["VRS"], sig_cols=_sig, money_cols=["Total ARR", "ARR at risk"])
-    styw = styw.map(lambda v: _PLAY_CSS.get(v, ""), subset=["Play"])
-    styw = styw.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Customer", "Segment", "Owner", "Total ARR"])
-    styw = styw.map(lambda _v: "color:#B08480;font-weight:500", subset=["ARR at risk"])
-    st.dataframe(styw, width="stretch", hide_index=True)
-
-    st.markdown("---")
+        _pids = pd.concat([risk_rows["cust_id"], exp_rows["cust_id"]]).unique()
+        prow = cust[cust["cust_id"].isin(_pids)].copy()
+        prow[["Play", "Owner"]] = prow["cust_id"].apply(lambda c: pd.Series(_play_row(c)))
+        prow = prow.dropna(subset=["Play"])
+        if pchoice != "All":
+            prow = prow[prow["Play"] == pchoice]
+        prow = prow.sort_values(["ARRatrisk", "TotalARR"], ascending=False)
+        pdisp = prow.rename(columns={"cust_name": "Customer", "segment": "Segment",
+                                     "TotalARR": "Total ARR", "ARRatrisk": "ARR at risk"})[
+            ["Customer", "Segment", "Play", "Owner", "VRS"] + _sig + ["Total ARR", "ARR at risk"]]
+        _PLAY_CSS = {"Activate": "color:#C09A45;font-weight:500",
+                     "Win back": "color:#B36259;font-weight:500",
+                     "Upsell": "color:#5E9A6E;font-weight:500"}
+        styw = style_scores(pdisp, vrs_cols=["VRS"], sig_cols=_sig, money_cols=["Total ARR", "ARR at risk"])
+        styw = styw.map(lambda v: _PLAY_CSS.get(v, ""), subset=["Play"])
+        styw = styw.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Customer", "Segment", "Owner", "Total ARR"])
+        styw = styw.map(lambda _v: "color:#B08480;font-weight:500", subset=["ARR at risk"])
+        st.dataframe(styw, width="stretch", hide_index=True)
 
     # ---- Drill into any customer ----
-    _dl, _dr = st.columns([1.1, 2.9], vertical_alignment="center")
-    with _dl:
-        st.markdown("**Drill into any customer**")
-    with _dr:
-        pick = st.selectbox("Customer", sorted(df["cust_name"].unique()), label_visibility="collapsed")
-    cid = df.loc[df["cust_name"] == pick, "cust_id"].iloc[0]
-    st.caption(f"Products ({pd.to_datetime(sel_month + '-01').strftime('%b %Y')}) — "
-               "click a row to switch the trajectory below.")
+    with st.container(border=True):
+        _dl, _dr = st.columns([1.1, 2.9], vertical_alignment="center")
+        with _dl:
+            st.markdown(f"<div style='{_ttl}'>Drill into any customer</div>", unsafe_allow_html=True)
+        with _dr:
+            _names = sorted(df["cust_name"].unique())
+            _default = "Mcclure, Ward and Lee"   # cleanest ramp-to-full-utilization story
+            pick = st.selectbox("Customer", _names,
+                                index=_names.index(_default) if _default in _names else 0,
+                                label_visibility="collapsed")
+        cid = df.loc[df["cust_name"] == pick, "cust_id"].iloc[0]
+        st.caption(f"Products ({pd.to_datetime(sel_month + '-01').strftime('%b %Y')}) — "
+                   "click a row to switch the trajectory below.")
 
-    sub = df[df["cust_id"] == cid][["product_name", "product_platform", "vrs", "state", "util_health",
-            "feature_adoption", "sustained_usage", "ttv_score", "arr"]]
-    subd = sub.sort_values("vrs").copy()
-    subd = subd.rename(columns={
-        "product_name": "Product", "product_platform": "Platform", "vrs": "VRS",
-        "state": "State", "util_health": "License Utilization", "feature_adoption": "Feature Adoption",
-        "sustained_usage": "Sustained Usage", "ttv_score": "Time to Value", "arr": "ARR"})
-    subd["Platform"] = subd["Platform"].map(PLAT_LABEL).fillna(subd["Platform"])
-    subd["State"] = subd["VRS"].apply(band_of)   # display the VRS band, not the raw state
-    subd = subd.reset_index(drop=True)
-    _STATE_CSS = {b: f"color:{BAND_PLAIN[b]};font-weight:500" for b in BAND_PLAIN}
-    stys = style_scores(subd, vrs_cols=["VRS"],
-                        sig_cols=["License Utilization", "Feature Adoption", "Sustained Usage", "Time to Value"],
-                        money_cols=["ARR"])
-    stys = stys.map(lambda v: _STATE_CSS.get(v, ""), subset=["State"])
-    stys = stys.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Product", "Platform", "ARR"])
-    ev_cp = st.dataframe(stys, width="stretch", hide_index=True,
-                         on_select="rerun", selection_mode="single-row", key=f"cust_prod_{cid}")
-    if ev_cp.selection.rows:
-        prod_pick = subd.iloc[ev_cp.selection.rows[0]]["Product"]
-    else:
-        prod_pick = subd.iloc[0]["Product"]
-    pid = df.loc[(df["cust_id"] == cid) & (df["product_name"] == prod_pick), "product_id"].iloc[0]
+        sub = df[df["cust_id"] == cid][["product_name", "product_platform", "vrs", "state", "util_health",
+                "feature_adoption", "sustained_usage", "ttv_score", "arr"]]
+        subd = sub.sort_values("vrs").copy()
+        subd = subd.rename(columns={
+            "product_name": "Product", "product_platform": "Platform", "vrs": "VRS",
+            "state": "State", "util_health": "License Utilization", "feature_adoption": "Feature Adoption",
+            "sustained_usage": "Sustained Usage", "ttv_score": "Time to Value", "arr": "ARR"})
+        subd["Platform"] = subd["Platform"].map(PLAT_LABEL).fillna(subd["Platform"])
+        subd["State"] = subd["VRS"].apply(band_of)   # display the VRS band, not the raw state
+        subd = subd.reset_index(drop=True)
+        _STATE_CSS = {b: f"color:{BAND_PLAIN[b]};font-weight:500" for b in BAND_PLAIN}
+        stys = style_scores(subd, vrs_cols=["VRS"],
+                            sig_cols=["License Utilization", "Feature Adoption", "Sustained Usage", "Time to Value"],
+                            money_cols=["ARR"])
+        stys = stys.map(lambda v: _STATE_CSS.get(v, ""), subset=["State"])
+        stys = stys.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Product", "Platform", "ARR"])
+        ev_cp = st.dataframe(stys, width="stretch", hide_index=True,
+                             on_select="rerun", selection_mode="single-row", key=f"cust_prod_{cid}")
+        if ev_cp.selection.rows:
+            prod_pick = subd.iloc[ev_cp.selection.rows[0]]["Product"]
+        else:
+            prod_pick = subd.iloc[0]["Product"]
+        pid = df.loc[(df["cust_id"] == cid) & (df["product_name"] == prod_pick), "product_id"].iloc[0]
 
-    ser = get_sku_series(cid, pid)
-    ser["month"] = pd.to_datetime(ser["month"].astype(str)).dt.strftime("%b '%y")
-    cc1, cc2 = st.columns(2)
-    with cc1:
-        figl = px.line(ser, x="month", y="lur", markers=True, color_discrete_sequence=["#E8B0A3"])
-        figl.add_hline(y=1.0, line_dash="dot", line_color="#8FB79A",
-                       annotation_text="full · 1.0", annotation_position="top left",
-                       annotation_font_color="#8FB79A")
-        figl.add_hline(y=1.2, line_dash="dot", line_color="#B08480",
-                       annotation_text="overage · 1.2", annotation_position="top left")
-        figl.update_layout(title=dict(text=f"{prod_pick} — License Utilization by month",
-                                      font=dict(size=15, color="#1b2338")),
-                           height=300, xaxis_type="category",
-                           yaxis=dict(tickvals=[0, 0.5, 1.0, 1.2],
-                                      range=[-0.05, max(1.35, float(ser['lur'].max()) * 1.1)]),
-                           yaxis_title="License Utilization (consumed / licensed)",
-                           xaxis_title="", margin=dict(t=40, b=10))
-        st.plotly_chart(dechrome(figl), width="stretch", config=PLOTLY_CONFIG)
-    with cc2:
-        figv = px.line(ser, x="month", y="vrs", markers=True, color_discrete_sequence=["#E8B0A3"])
-        figv.add_hline(y=50, line_dash="dot", line_color="#D8A48F",
-                       annotation_text="at risk below · 50%", annotation_position="bottom left",
-                       annotation_font_color="#D8A48F")
-        figv.update_layout(title=dict(text=f"{prod_pick} — VRS by month",
-                                      font=dict(size=15, color="#1b2338")),
-                           height=300, xaxis_type="category", yaxis_range=[0, 100],
-                           yaxis=dict(tickvals=[0, 25, 50, 75, 100]),
-                           yaxis_title="VRS (%)", yaxis_ticksuffix="%", xaxis_title="",
-                           margin=dict(t=40, b=10))
-        st.plotly_chart(dechrome(figv), width="stretch", config=PLOTLY_CONFIG)
+    with st.container(border=True):
+        ser = get_sku_series(cid, pid)
+        ser["month"] = pd.to_datetime(ser["month"].astype(str)).dt.strftime("%b '%y")
+        _prow = df[(df["cust_id"] == cid) & (df["product_name"] == prod_pick)].iloc[0]
+        _pband = band_of(_prow["vrs"])
+        st.markdown(
+            f"<div style='{_ttl};margin-bottom:10px'>{pick} — {prod_pick}"
+            f" <span style='font-size:13px;font-weight:400;color:#6B7690'>· {money(_prow['arr'])} ARR ·</span>"
+            f" <span style='font-size:13px;font-weight:600;color:{BAND_PLAIN[_pband]}'>{_pband}</span></div>",
+            unsafe_allow_html=True)
+        cc1, cc2 = st.columns(2)
+        with cc1, st.container(border=True):
+            figl = px.line(ser, x="month", y="lur", markers=True, color_discrete_sequence=["#FA582D"])
+            figl.add_hline(y=1.0, line_dash="dot", line_color="#8FB79A",
+                           annotation_text="full · 1.0", annotation_position="top left",
+                           annotation_font_color="#8FB79A")
+            figl.add_hline(y=1.2, line_dash="dot", line_color="#B08480",
+                           annotation_text="overage · 1.2", annotation_position="top left",
+                           annotation_font_color="#B08480")
+            figl.update_layout(title=dict(text="License Utilization by month · consumed / licensed",
+                                          font=dict(size=13, color="#6B7690"), x=0, xanchor="left"),
+                               height=272, xaxis_type="category",
+                               yaxis=dict(tickvals=[0, 0.5, 1.0, 1.2],
+                                          range=[-0.05, max(1.35, float(ser['lur'].max()) * 1.1)]),
+                               yaxis_title=None, xaxis_title="", margin=dict(t=34, b=10, l=4))
+            st.plotly_chart(dechrome(figl), width="stretch", config=PLOTLY_CONFIG)
+        with cc2, st.container(border=True):
+            figv = px.line(ser, x="month", y="vrs", markers=True, color_discrete_sequence=["#FA582D"])
+            figv.add_hline(y=50, line_dash="dot", line_color="#D8A48F",
+                           annotation_text="at risk below · 50%", annotation_position="bottom left",
+                           annotation_font_color="#D8A48F")
+            figv.update_layout(title=dict(text="VRS by month",
+                                          font=dict(size=13, color="#6B7690"), x=0, xanchor="left"),
+                               height=272, xaxis_type="category", yaxis_range=[0, 100],
+                               yaxis=dict(tickvals=[0, 25, 50, 75, 100]),
+                               yaxis_title=None, yaxis_ticksuffix="%", xaxis_title="",
+                               margin=dict(t=34, b=10, l=4))
+            st.plotly_chart(dechrome(figv), width="stretch", config=PLOTLY_CONFIG)
 
-    st.markdown(f"**Feature detail — {prod_pick}**")
-    st.caption("Each feature judged against its own expected monthly volume.")
-    fdf = get_features(cid, pid, sel_month).copy()
-    fdf = fdf.rename(columns={"feature_name": "Feature", "usage_events": "Usage events",
-                              "feature_score": "Score", "adoption_level": "Adoption level"})
-    _ADOPT_CSS = {"deep": f"color:{BAND_PLAIN['Value Realized']};font-weight:500",
-                  "active": f"color:{BAND_PLAIN['Developing']};font-weight:500",
-                  "enabled_idle": f"color:{BAND_PLAIN['At Risk']};font-weight:500",
-                  "not_enabled": "color:#6B7690;font-weight:500"}
-    styf = style_scores(fdf, sig_cols=["Score"])
-    styf = styf.map(lambda v: _ADOPT_CSS.get(v, ""), subset=["Adoption level"])
-    styf = styf.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Feature"])
-    styf = styf.format({"Usage events": "{:,.0f}", "Score": "{:.0%}"}, na_rep="-")
-    st.dataframe(styf, width="stretch", hide_index=True)
-    _leg = [("not_enabled", "0 events → 0%", "#9AA0A6"),
-            ("enabled_idle", "<20% of expected volume → 30%", BAND_PLAIN["At Risk"]),
-            ("active", "20–80% of expected → 70%", BAND_PLAIN["Developing"]),
-            ("deep", "80%+ of expected → 100%", BAND_PLAIN["Value Realized"])]
-    st.markdown("<div style='font-size:12px;color:#6b7690;margin-top:4px'>Adoption levels: "
-                + " &nbsp;·&nbsp; ".join(
-                    f"<span style='color:{c};font-weight:600'>{n}</span> <span>{d}</span>"
-                    for n, d, c in _leg)
-                + "</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='{_ttl}'>Feature detail</div>", unsafe_allow_html=True)
+        st.caption("Each feature judged against its own expected monthly volume.")
+        fdf = get_features(cid, pid, sel_month).copy()
+        fdf = fdf.rename(columns={"feature_name": "Feature", "usage_events": "Usage events",
+                                  "feature_score": "Score", "adoption_level": "Adoption level"})
+        _ADOPT_CSS = {"deep": f"color:{BAND_PLAIN['Value Realized']};font-weight:500",
+                      "active": f"color:{BAND_PLAIN['Developing']};font-weight:500",
+                      "enabled_idle": f"color:{BAND_PLAIN['At Risk']};font-weight:500",
+                      "not_enabled": "color:#6B7690;font-weight:500"}
+        styf = style_scores(fdf, sig_cols=["Score"])
+        styf = styf.map(lambda v: _ADOPT_CSS.get(v, ""), subset=["Adoption level"])
+        styf = styf.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Feature"])
+        styf = styf.format({"Usage events": "{:,.0f}", "Score": "{:.0%}"}, na_rep="-")
+        st.dataframe(styf, width="stretch", hide_index=True,
+                     column_config={"Adoption level": st.column_config.Column(
+                         help="Score by monthly usage vs expected volume: not_enabled = 0 events → 0% · "
+                              "enabled_idle = under 20% → 30% · active = 20–80% → 70% · deep = 80%+ → 100%")})
+        _leg = [("not_enabled", "none", "#9AA0A6"),
+                ("enabled_idle", "under 20%", BAND_PLAIN["At Risk"]),
+                ("active", "20–80%", BAND_PLAIN["Developing"]),
+                ("deep", "over 80%", BAND_PLAIN["Value Realized"])]
+        st.markdown("<div style='font-size:12px;color:#6B7690;margin-top:4px'>"
+                    "Adoption level = monthly usage vs expected: "
+                    + " &nbsp;·&nbsp; ".join(
+                        f"<span style='color:{c};font-weight:600'>{n}</span> <span>{d}</span>"
+                        for n, d, c in _leg)
+                    + "</div>", unsafe_allow_html=True)
 
 # ------------------------------------------------------------- By Product
 with tab_prod:
@@ -785,133 +790,136 @@ with tab_prod:
         _rk = g.loc[g["vrs"] < 50, "arr"].sum()
         _pct = (_rk / _arr * 100) if _arr else 0
         _cards += (
-            "<div style='flex:1;background:#ffffff;border:1px solid #e2e7f1;border-radius:12px;"
+            "<div style='flex:1;background:#ffffff;border:1px solid #E3E1DA;border-radius:12px;"
             "padding:12px 16px;min-width:0'>"
             f"<div style='font-size:12px;font-weight:600;color:#6B7690'>{PLAT_LABEL[_plat]}</div>"
-            f"<div style='font-size:24px;font-weight:600;color:#3D465C;margin-top:2px'>{_v:.1f}% "
-            "<span style='font-size:12px;color:#6b7690;font-weight:400'>VRS</span></div>"
-            f"<div style='font-size:12.5px;color:#6b7690;margin-top:2px;white-space:nowrap'>"
+            f"<div style='font-size:24px;font-weight:700;color:#1B2338;margin-top:2px'>{_v:.1f}% "
+            "<span style='font-size:12px;color:#6B7690;font-weight:400'>VRS</span></div>"
+            f"<div style='font-size:12.5px;color:#6B7690;margin-top:2px;white-space:nowrap'>"
             f"ARR {money(_arr)} · <span style='color:#B08480;font-weight:500'>at risk {money(_rk)}</span>"
             f" · {_pct:.0f}%</div>"
-            "<div style='height:6px;border-radius:3px;background:#eef1f6;overflow:hidden;margin-top:12px'>"
+            "<div style='height:6px;border-radius:3px;background:#F0EEE8;overflow:hidden;margin-top:12px'>"
             f"<div style='width:{_v:.0f}%;height:100%;background:#FA582D'></div></div></div>")
     st.markdown(f"<div style='display:flex;gap:10px;margin-bottom:12px'>{_cards}</div>",
                 unsafe_allow_html=True)
 
     # ---- products table (one table, platform filter) ----
-    _hl, _hr = st.columns([2.1, 1.9], vertical_alignment="center")
-    with _hl:
-        st.markdown("**Products — VRS across the customer base**")
-        st.caption("Sorted by ARR at risk. Click a row to see the customers driving the score.")
-    with _hr:
-        _opts = ["All"] + [PLAT_LABEL[p] for p in _PLAT_ORDER]
-        if hasattr(st, "pills"):
-            choice = st.pills("Platform filter", _opts, default="All", label_visibility="collapsed")
-        else:
-            choice = st.radio("Platform filter", _opts, horizontal=True, label_visibility="collapsed")
-        choice = choice or "All"
+    with st.container(border=True):
+        _hl, _hr = st.columns([2.1, 1.9], vertical_alignment="center")
+        with _hl:
+            st.markdown(f"<div style='{_ttl}'>Products — VRS across the customer base</div>", unsafe_allow_html=True)
+            st.caption("Sorted by ARR at risk. Click a row to see the customers driving the score.")
+        with _hr:
+            _opts = ["All"] + [PLAT_LABEL[p] for p in _PLAT_ORDER]
+            if hasattr(st, "pills"):
+                choice = st.pills("Platform filter", _opts, default="All", label_visibility="collapsed")
+            else:
+                choice = st.radio("Platform filter", _opts, horizontal=True, label_visibility="collapsed")
+            choice = choice or "All"
 
-    dm = df.copy()
-    dm["model"] = dm["product_name"].str.replace(r"\s*SKU-\d+$", "", regex=True)
-    pm = (dm.groupby(["product_platform", "model"])[
-              ["vrs", "arr", "util_health", "feature_adoption", "sustained_usage", "ttv_score",
-               "cust_id", "state", "flag_expansion"]]
-          .apply(lambda g: pd.Series({
-              "VRS": wvrs(g), "License Utilization": _wc(g, "util_health"),
-              "Feature Adoption": _wc(g, "feature_adoption"), "Sustained Usage": _wc(g, "sustained_usage"),
-              "Time to Value": _wc(g, "ttv_score"), "ARR": g["arr"].sum(),
-              "ARR_at_risk": g.loc[g["vrs"] < 50, "arr"].sum(),
-              "shelf": g.loc[g["state"] == "Shelfware Risk", "cust_id"].nunique(),
-              "sd": g.loc[g["state"].isin(["Churn Signal", "Lapsed"]), "cust_id"].nunique(),
-              "ov": g.loc[g["flag_expansion"], "cust_id"].nunique()}))
-          .reset_index())
-    pm["Platform"] = pm["product_platform"].map(PLAT_LABEL)
-
-    def _anom_text(r):
-        parts = []
-        if r["shelf"]:
-            parts.append(f"{int(r['shelf'])} shelfware")
-        if r["sd"]:
-            parts.append(f"{int(r['sd'])} spike & drop")
-        if r["ov"]:
-            parts.append(f"{int(r['ov'])} overage")
-        return " · ".join(parts) if parts else "—"
-    pm["Anomalies"] = pm.apply(_anom_text, axis=1)
-
-    view = pm if choice == "All" else pm[pm["Platform"] == choice]
-    view = view.sort_values("ARR_at_risk", ascending=False).reset_index(drop=True)
-    tblp = view.rename(columns={"model": "Product model", "ARR_at_risk": "ARR at risk"})[
-        ["Product model", "Platform", "VRS"] + _psig + ["ARR", "ARR at risk", "Anomalies"]]
-    styp = style_scores(tblp, vrs_cols=["VRS"], sig_cols=_psig, money_cols=["ARR", "ARR at risk"])
-    styp = styp.map(lambda _v: "color:#B08480;font-weight:500", subset=["ARR at risk"])
-    styp = styp.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Product model", "Platform", "ARR"])
-    styp = styp.map(lambda _v: "color:#9AA0A6;font-size:11px", subset=["Anomalies"])
-    evp = st.dataframe(styp, width="stretch", hide_index=True,
-                       on_select="rerun", selection_mode="single-row", key=f"pt_{choice}")
-
-    if len(view):
-        _row = view.iloc[evp.selection.rows[0]] if evp.selection.rows else view.iloc[0]
-        model, _mplat = _row["model"], _row["product_platform"]
-        st.markdown(f"**{model} — customers on this product**")
-        st.caption("Worst VRS first. Anomaly ties each account to an edge-case pattern.")
-        dd = dm[(dm["product_platform"] == _mplat) & (dm["model"] == model)]
-        cc = (dd.groupby(["cust_id", "cust_name", "segment", "region"])[
-                  ["vrs", "arr", "util_health", "feature_adoption", "sustained_usage", "ttv_score"]]
+        dm = df.copy()
+        dm["model"] = dm["product_name"].str.replace(r"\s*SKU-\d+$", "", regex=True)
+        pm = (dm.groupby(["product_platform", "model"])[
+                  ["vrs", "arr", "util_health", "feature_adoption", "sustained_usage", "ttv_score",
+                   "cust_id", "state", "flag_expansion"]]
               .apply(lambda g: pd.Series({
                   "VRS": wvrs(g), "License Utilization": _wc(g, "util_health"),
                   "Feature Adoption": _wc(g, "feature_adoption"), "Sustained Usage": _wc(g, "sustained_usage"),
-                  "Time to Value": _wc(g, "ttv_score"), "ARR": g["arr"].sum()}))
-              .reset_index().sort_values("VRS"))
+                  "Time to Value": _wc(g, "ttv_score"), "ARR": g["arr"].sum(),
+                  "ARR_at_risk": g.loc[g["vrs"] < 50, "arr"].sum(),
+                  "shelf": g.loc[g["state"] == "Shelfware Risk", "cust_id"].nunique(),
+                  "sd": g.loc[g["state"].isin(["Churn Signal", "Lapsed"]), "cust_id"].nunique(),
+                  "ov": g.loc[g["flag_expansion"], "cust_id"].nunique()}))
+              .reset_index())
+        pm["Platform"] = pm["product_platform"].map(PLAT_LABEL)
 
-        def _anom_of(g):
-            if (g["state"] == "Shelfware Risk").any():
-                return "Shelfware"
-            if g["state"].isin(["Churn Signal", "Lapsed"]).any():
-                return "Spike & drop"
-            if g["flag_expansion"].any():
-                return "Overage (upsell)"
-            if g["flag_single_feature_dependency"].any():
-                return "Single Feature Flag"
-            return "—"
-        anm = (dd.groupby("cust_id")[["state", "flag_expansion", "flag_single_feature_dependency"]]
-               .apply(_anom_of).rename("Anomaly").reset_index())
-        cc = cc.merge(anm, on="cust_id", how="left")
-        cd = cc.rename(columns={"cust_name": "Customer", "segment": "Segment", "region": "Region"})[
-            ["Customer", "Segment", "Region", "Anomaly", "VRS"] + _psig + ["ARR"]]
-        _ANOM = "color:#6B7690;font-weight:500"   # item 25: plain neutral text, no pill
-        _ANOM_CSS = {k: _ANOM for k in
-                     ("Shelfware", "Spike & drop", "Overage (upsell)", "Single Feature Flag")}
-        styc = style_scores(cd, vrs_cols=["VRS"], sig_cols=_psig, money_cols=["ARR"])
-        styc = styc.map(lambda v: _ANOM_CSS.get(v, ""), subset=["Anomaly"])
-        styc = styc.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Customer", "Segment", "Region", "ARR"])
-        st.dataframe(styc, width="stretch", hide_index=True)
+        def _anom_text(r):
+            parts = []
+            if r["shelf"]:
+                parts.append(f"{int(r['shelf'])} shelfware")
+            if r["sd"]:
+                parts.append(f"{int(r['sd'])} spike & drop")
+            if r["ov"]:
+                parts.append(f"{int(r['ov'])} overage")
+            return " · ".join(parts) if parts else "—"
+        pm["Anomalies"] = pm.apply(_anom_text, axis=1)
 
-    with st.expander("How the 4 signals are scored"):
+        view = pm if choice == "All" else pm[pm["Platform"] == choice]
+        view = view.sort_values("ARR_at_risk", ascending=False).reset_index(drop=True)
+        tblp = view.rename(columns={"model": "Product model", "ARR_at_risk": "ARR at risk"})[
+            ["Product model", "Platform", "VRS"] + _psig + ["ARR", "ARR at risk", "Anomalies"]]
+        styp = style_scores(tblp, vrs_cols=["VRS"], sig_cols=_psig, money_cols=["ARR", "ARR at risk"])
+        styp = styp.map(lambda _v: "color:#B08480;font-weight:500", subset=["ARR at risk"])
+        styp = styp.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Product model", "Platform", "ARR"])
+        styp = styp.map(lambda _v: "color:#9AA0A6;font-size:11px", subset=["Anomalies"])
+        _SIG_HELP = {
+            "VRS": "0–100 · 35% License Utilization + 25% Feature Adoption + "
+                   "25% Sustained Usage + 15% Time to Value, ARR-weighted",
+            "License Utilization": "Depth of use (consumed / licensed): ~0% below 0.1 (shelfware) → "
+                                   "100% near full use → capped at 80% above 1.2× (overage). 35% of VRS.",
+            "Feature Adoption": "Breadth: average per-feature depth; un-adopted features count as 0. 25% of VRS.",
+            "Sustained Usage": "Durability: recency-weighted activity over the last 3 months (50/30/20); "
+                               "spike-then-drop scores 20%. 25% of VRS.",
+            "Time to Value": "Speed to first real use: 100% within 30 days → 0% by 90 days; "
+                             "never activated → 0%. 15% of VRS.",
+        }
+        _sig_cfg = {k: st.column_config.Column(help=v) for k, v in _SIG_HELP.items()}
+        evp = st.dataframe(styp, width="stretch", hide_index=True, column_config=_sig_cfg,
+                           on_select="rerun", selection_mode="single-row", key=f"pt_{choice}")
+
+        if len(view):
+            if evp.selection.rows:
+                _row = view.iloc[evp.selection.rows[0]]
+            else:
+                _PREF_MODEL = {   # per filter: healthiest-looking top rows with a touch of variety
+                    "All": "PA-460", "Hardware NGFW": "PA-460",
+                    "SASE": "Prisma Access Remote Networks",
+                    "Software NGFW": "VM-700", "Cloud NGFW": "Cloud NGFW for AWS"}
+                _prefm = view[view["model"] == _PREF_MODEL.get(choice, "")]
+                _row = _prefm.iloc[0] if len(_prefm) else view.iloc[0]
+            model, _mplat = _row["model"], _row["product_platform"]
+            with st.container(border=True):
+                    st.markdown(f"<div style='{_ttl}'>{model} — customers on this product</div>", unsafe_allow_html=True)
+                    st.caption("Worst VRS first. Anomaly ties each account to an edge-case pattern.")
+                    dd = dm[(dm["product_platform"] == _mplat) & (dm["model"] == model)]
+                    cc = (dd.groupby(["cust_id", "cust_name", "segment", "region"])[
+                              ["vrs", "arr", "util_health", "feature_adoption", "sustained_usage", "ttv_score"]]
+                          .apply(lambda g: pd.Series({
+                              "VRS": wvrs(g), "License Utilization": _wc(g, "util_health"),
+                              "Feature Adoption": _wc(g, "feature_adoption"), "Sustained Usage": _wc(g, "sustained_usage"),
+                              "Time to Value": _wc(g, "ttv_score"), "ARR": g["arr"].sum()}))
+                          .reset_index().sort_values("VRS"))
+
+                    def _anom_of(g):
+                        if (g["state"] == "Shelfware Risk").any():
+                            return "Shelfware"
+                        if g["state"].isin(["Churn Signal", "Lapsed"]).any():
+                            return "Spike & drop"
+                        if g["flag_expansion"].any():
+                            return "Overage (upsell)"
+                        if g["flag_single_feature_dependency"].any():
+                            return "Single Feature Flag"
+                        return "—"
+                    anm = (dd.groupby("cust_id")[["state", "flag_expansion", "flag_single_feature_dependency"]]
+                           .apply(_anom_of).rename("Anomaly").reset_index())
+                    cc = cc.merge(anm, on="cust_id", how="left")
+                    cd = cc.rename(columns={"cust_name": "Customer", "segment": "Segment", "region": "Region"})[
+                        ["Customer", "Segment", "Region", "Anomaly", "VRS"] + _psig + ["ARR"]]
+                    _ANOM = "color:#6B7690;font-weight:500"   # item 25: plain neutral text, no pill
+                    _ANOM_CSS = {k: _ANOM for k in
+                                 ("Shelfware", "Spike & drop", "Overage (upsell)", "Single Feature Flag")}
+                    styc = style_scores(cd, vrs_cols=["VRS"], sig_cols=_psig, money_cols=["ARR"])
+                    styc = styc.map(lambda v: _ANOM_CSS.get(v, ""), subset=["Anomaly"])
+                    styc = styc.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Customer", "Segment", "Region", "ARR"])
+                    st.dataframe(styc, width="stretch", hide_index=True, column_config=_sig_cfg)
+
         st.markdown(
-            "<div style='font-size:13.5px;font-weight:600;color:#3D465C;margin:2px 0 10px'>"
-            "VRS = 35% × License Utilization + 25% × Feature Adoption + 25% × Sustained Usage "
-            "+ 15% × Time to Value <span style='color:#6B7690;font-weight:400'>(each 0–100%)</span></div>",
+            "<div style='font-size:12px;color:#6B7690;margin-top:6px;display:flex;gap:14px;"
+            "align-items:center;flex-wrap:wrap'>"
+            "<span style='font-size:11px;font-weight:700;color:#6B7690;letter-spacing:1px'>VRS</span>"
+            "<span><span style='color:#3D465C;font-weight:600'>35%</span> License Utilization"
+            " &nbsp;+&nbsp; <span style='color:#3D465C;font-weight:600'>25%</span> Feature Adoption"
+            " &nbsp;+&nbsp; <span style='color:#3D465C;font-weight:600'>25%</span> Sustained Usage"
+            " &nbsp;+&nbsp; <span style='color:#3D465C;font-weight:600'>15%</span> Time to Value"
+            " &nbsp;·&nbsp; hover a column header for how each signal is scored</span></div>",
             unsafe_allow_html=True)
-        _sigrows = [
-            ("License Utilization", "35%", "Depth of use (consumed / licensed)",
-             "~0% below 0.1 (shelfware) → 100% near full use → capped at 80% above 1.2× (overage)"),
-            ("Feature Adoption", "25%", "Breadth of features used",
-             "Avg of per-feature depth (0% not enabled → 100% deep); un-adopted features count as 0"),
-            ("Sustained Usage", "25%", "Durability (spike vs lasting)",
-             "Recency-weighted active over the last 3 months (50/30/20); all 3 active → 100%, spike-then-drop → 20%"),
-            ("Time to Value", "15%", "Speed to first real use",
-             "100% within 30 days → 0% by 90 days; never activated → 0%"),
-        ]
-        _srows = "".join(
-            f"<tr style='border-bottom:1px solid #eef1f6'>"
-            f"<td style='padding:8px 10px;font-weight:600;color:#3D465C;white-space:nowrap'>{s}</td>"
-            f"<td style='padding:8px 10px;font-weight:700;color:#1B2338'>{w}</td>"
-            f"<td style='padding:8px 10px;color:#6B7690;white-space:nowrap'>{m}</td>"
-            f"<td style='padding:8px 10px;color:#6B7690'>{r}</td></tr>"
-            for s, w, m, r in _sigrows)
-        _shdr = "".join(f"<th style='text-align:left;padding:6px 10px;color:#6b7690;font-size:12px;"
-                        f"font-weight:600;border-bottom:1px solid #e2e7f1'>{h}</th>"
-                        for h in ["Signal", "Weight", "What it measures", "Range / scoring"])
-        st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
-                    f"<thead><tr>{_shdr}</tr></thead><tbody>{_srows}</tbody></table>",
-                    unsafe_allow_html=True)
