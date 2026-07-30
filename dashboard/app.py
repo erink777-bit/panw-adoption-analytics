@@ -320,9 +320,15 @@ sel_month = st.sidebar.selectbox("As of month", month_opts, index=len(month_opts
 _ALL_SEG = ["Enterprise", "Mid-Market"]
 _ALL_REG = ["AMER", "EMEA", "APAC", "LATAM"]
 _ALL_PLAT = ["hardware_ngfw", "software_ngfw", "sase", "cloud_ngfw"]
-segs = st.sidebar.multiselect("Segment", _ALL_SEG, default=_ALL_SEG) or _ALL_SEG
-regs = st.sidebar.multiselect("Region", _ALL_REG, default=_ALL_REG) or _ALL_REG
-plats = st.sidebar.multiselect("Product platform", _ALL_PLAT, default=_ALL_PLAT) or _ALL_PLAT
+_PLAT_NAMES = {"hardware_ngfw": "Hardware NGFW", "software_ngfw": "Software NGFW",
+               "sase": "SASE", "cloud_ngfw": "Cloud NGFW"}
+segs = st.sidebar.multiselect("Segment", _ALL_SEG, default=[],
+                              placeholder="All segments") or _ALL_SEG
+regs = st.sidebar.multiselect("Region", _ALL_REG, default=[],
+                              placeholder="All regions") or _ALL_REG
+plats = st.sidebar.multiselect("Product platform", _ALL_PLAT, default=[],
+                               format_func=lambda p: _PLAT_NAMES.get(p, p),
+                               placeholder="All platforms") or _ALL_PLAT
 st.sidebar.caption(f"data source: **{'BigQuery (live)' if MODE == 'bq' else 'local CSV (offline)'}**")
 # selectbox always returns a value; "All" expands to the full list.
 
