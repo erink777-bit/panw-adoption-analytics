@@ -142,9 +142,9 @@ back). Computed by recalculating the same KPI for those months and differencing 
 An up-arrow means the value rose vs. the comparison month; for at-risk metrics a decrease (down-arrow)
 is the good direction.
 
-## Actions tab — recommended plays
+## Recommended plays (By Customer tab)
 
-The Actions tab turns each state/flag into a **play**: the anomaly it addresses + an owner + a
+The Recommended plays table turns each state/flag into a **play**: the anomaly it addresses + an owner + a
 recommended action + the ARR at stake + an ARR-prioritized account worklist. The four plays map 1:1
 to the four injected anomalies (spike-and-drop spans two plays across its lifecycle):
 
@@ -161,7 +161,7 @@ Notes on the mapping:
 - **Mid-year expansion** (the 4th anomaly) has **no play** — it is a healthy growth event handled by the
   pipeline's overlap resolution; if the expanded account over-consumes it surfaces under Upsell.
 - Onboarding Stall, Churn Signal vs. Lapsed states, and the single-feature-dependency flag remain defined
-  in the framework/spec as finer-grained signals, but the Actions tab rolls them up to the three plays that
+  in the framework/spec as finer-grained signals, but the plays table rolls them up to the three plays that
   map 1:1 to the injected anomalies.
 
 Headline metrics on the tab: **ARR to defend** (sum of ARR across the at-risk plays), **ARR to expand**
