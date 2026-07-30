@@ -1,0 +1,101 @@
+cust_id,cust_name,region,segment,behavior_profile
+C0001,"Rodriguez, Figueroa and Sanchez",AMER,Mid-Market,slow_onboarder
+C0002,Doyle Ltd,APAC,Mid-Market,slow_onboarder
+C0003,"Mcclain, Miller and Henderson",APAC,Mid-Market,normal
+C0004,Davis and Sons,APAC,Mid-Market,normal
+C0005,"Guzman, Hoffman and Baldwin",AMER,Enterprise,normal
+C0006,"Gardner, Robinson and Lawrence",AMER,Mid-Market,normal
+C0007,Blake and Sons,EMEA,Mid-Market,overage
+C0008,"Henderson, Ramirez and Lewis",AMER,Mid-Market,slow_onboarder
+C0009,Garcia-James,AMER,Mid-Market,overage
+C0010,Abbott-Munoz,APAC,Mid-Market,shelfware
+C0011,Blair PLC,AMER,Enterprise,overage
+C0012,Dudley Group,AMER,Mid-Market,normal
+C0013,Arnold Ltd,AMER,Enterprise,normal
+C0014,"Mcclure, Ward and Lee",AMER,Mid-Market,slow_onboarder
+C0015,Williams and Sons,EMEA,Mid-Market,normal
+C0016,Galloway-Wyatt,EMEA,Enterprise,shelfware
+C0017,James Group,EMEA,Enterprise,normal
+C0018,"Flowers, Martin and Kelly",AMER,Mid-Market,normal
+C0019,"Adams, Zuniga and Wong",EMEA,Mid-Market,overage
+C0020,"Reid, Ferguson and Sanchez",APAC,Mid-Market,normal
+C0021,Gray-Mayo,AMER,Enterprise,slow_onboarder
+C0022,"Watts, Robinson and Nguyen",EMEA,Enterprise,normal
+C0023,Perez Inc,AMER,Mid-Market,spike_drop
+C0024,Morales-Jones,AMER,Enterprise,normal
+C0025,"Walter, Edwards and Rios",AMER,Mid-Market,normal
+C0026,Wilkerson-Day,AMER,Mid-Market,overage
+C0027,Baker and Sons,AMER,Enterprise,normal
+C0028,"Hoffman, Baker and Richards",AMER,Enterprise,normal
+C0029,"Ross, Robinson and Bright",EMEA,Enterprise,shelfware
+C0030,"Snyder, Campos and Callahan",EMEA,Enterprise,normal
+C0031,Burton Ltd,AMER,Enterprise,overage
+C0032,Carlson-Cruz,AMER,Mid-Market,normal
+C0033,"Ferrell, Rice and Maddox",AMER,Enterprise,normal
+C0034,Frazier Inc,AMER,Enterprise,spike_drop
+C0035,"Dyer, Potter and Mack",EMEA,Mid-Market,normal
+C0036,Rodriguez-Graham,AMER,Mid-Market,shelfware
+C0037,Smith-Bowen,AMER,Mid-Market,normal
+C0038,"Baker, Mason and White",AMER,Enterprise,normal
+C0039,Harrell LLC,AMER,Mid-Market,normal
+C0040,"Romero, Gonzalez and Brooks",EMEA,Enterprise,overage
+C0041,Ryan PLC,AMER,Mid-Market,normal
+C0042,George Group,EMEA,Enterprise,normal
+C0043,Rodriguez LLC,AMER,Enterprise,shelfware
+C0044,Allen-Allen,APAC,Enterprise,normal
+C0045,"Arroyo, Miller and Tucker",LATAM,Enterprise,spike_drop
+C0046,Spence PLC,APAC,Mid-Market,overage
+C0047,Anderson Group,AMER,Enterprise,normal
+C0048,"Martin, Rose and Obrien",EMEA,Mid-Market,spike_drop
+C0049,Hickman Ltd,AMER,Enterprise,normal
+C0050,"Harris, Collins and Carney",EMEA,Mid-Market,overage
+C0051,"Brooks, Lam and Hayes",AMER,Enterprise,overage
+C0052,Walker LLC,LATAM,Enterprise,shelfware
+C0053,Chapman and Sons,EMEA,Mid-Market,overage
+C0054,"Robinson, Jones and Welch",EMEA,Mid-Market,normal
+C0055,Jones Inc,AMER,Enterprise,shelfware
+C0056,Jones-Young,EMEA,Enterprise,normal
+C0057,"Washington, Ryan and Cummings",AMER,Mid-Market,shelfware
+C0058,"Johnston, Sanchez and Kennedy",EMEA,Enterprise,normal
+C0059,Lee-Davis,LATAM,Mid-Market,normal
+C0060,Gomez-Jenkins,EMEA,Mid-Market,normal
+C0061,"Brown, Valdez and Lucas",AMER,Enterprise,normal
+C0062,Powell LLC,EMEA,Mid-Market,normal
+C0063,Wright and Sons,APAC,Enterprise,normal
+C0064,"West, Henderson and Ramirez",APAC,Mid-Market,normal
+C0065,Baxter Inc,LATAM,Mid-Market,normal
+C0066,Morton-Chase,EMEA,Mid-Market,normal
+C0067,Williams PLC,AMER,Mid-Market,normal
+C0068,Novak and Sons,LATAM,Enterprise,normal
+C0069,Russell Group,AMER,Enterprise,normal
+C0070,Hancock Inc,AMER,Mid-Market,normal
+C0071,Gray Group,AMER,Enterprise,normal
+C0072,House-Glover,EMEA,Enterprise,normal
+C0073,Henderson-Bernard,AMER,Mid-Market,normal
+C0074,"Stanley, Tucker and Lee",EMEA,Enterprise,normal
+C0075,Novak PLC,EMEA,Enterprise,normal
+C0076,"Daniels, Adkins and Brown",EMEA,Enterprise,normal
+C0077,"Woods, Calhoun and Schmidt",EMEA,Mid-Market,normal
+C0078,Yu Inc,EMEA,Mid-Market,normal
+C0079,Jones Inc,AMER,Enterprise,normal
+C0080,"Hensley, Powell and David",EMEA,Mid-Market,normal
+C0081,"Sanchez, Wheeler and Harvey",APAC,Enterprise,normal
+C0082,Sandoval-Cunningham,EMEA,Mid-Market,normal
+C0083,Donovan-Harris,APAC,Enterprise,normal
+C0084,"Edwards, Baker and Anderson",LATAM,Enterprise,spike_drop
+C0085,"Evans, Stewart and Walton",AMER,Mid-Market,shelfware
+C0086,Smith PLC,EMEA,Mid-Market,normal
+C0087,"Ferrell, Jones and Lewis",AMER,Mid-Market,overage
+C0088,Anderson-Bailey,EMEA,Mid-Market,shelfware
+C0089,Suarez LLC,AMER,Enterprise,overage
+C0090,Moore-Bass,AMER,Enterprise,normal
+C0091,"Turner, Riggs and Roman",EMEA,Enterprise,normal
+C0092,"Smith, Montoya and Evans",AMER,Mid-Market,normal
+C0093,"Garcia, Humphrey and Baker",LATAM,Enterprise,normal
+C0094,Newton and Sons,AMER,Mid-Market,normal
+C0095,Campbell-Clark,AMER,Enterprise,overage
+C0096,Harris-Walters,AMER,Enterprise,normal
+C0097,Wagner-King,APAC,Enterprise,normal
+C0098,Davis Group,EMEA,Mid-Market,overage
+C0099,Williams-Cook,AMER,Enterprise,normal
+C0100,Walsh LLC,AMER,Mid-Market,normal

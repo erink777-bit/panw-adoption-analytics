@@ -1,0 +1,501 @@
+product_id,product_name,product_platform,unit_of_measure
+P0001,PA-5410 SKU-0001,hardware_ngfw,device_license
+P0002,CN-Series SKU-0002,software_ngfw,credits
+P0003,PA-5445 SKU-0003,hardware_ngfw,device_license
+P0004,Prisma Access Remote Networks SKU-0004,sase,seats
+P0005,Cloud NGFW for AWS SKU-0005,cloud_ngfw,usage_units
+P0006,PA-440 SKU-0006,hardware_ngfw,device_license
+P0007,PA-5410 SKU-0007,hardware_ngfw,device_license
+P0008,Prisma Access Browser SKU-0008,sase,seats
+P0009,CN-Series SKU-0009,software_ngfw,credits
+P0010,Prisma Access Remote Networks SKU-0010,sase,seats
+P0011,PA-1410 SKU-0011,hardware_ngfw,device_license
+P0012,PA-3440 SKU-0012,hardware_ngfw,device_license
+P0013,CN-Series SKU-0013,software_ngfw,credits
+P0014,CN-Series SKU-0014,software_ngfw,credits
+P0015,PA-3410 SKU-0015,hardware_ngfw,device_license
+P0016,CN-Series SKU-0016,software_ngfw,credits
+P0017,PA-460 SKU-0017,hardware_ngfw,device_license
+P0018,Prisma Access Mobile Users SKU-0018,sase,seats
+P0019,Cloud NGFW for Azure SKU-0019,cloud_ngfw,usage_units
+P0020,VM-100 SKU-0020,software_ngfw,credits
+P0021,VM-500 SKU-0021,software_ngfw,credits
+P0022,VM-300 SKU-0022,software_ngfw,credits
+P0023,PA-3410 SKU-0023,hardware_ngfw,device_license
+P0024,PA-7500 SKU-0024,hardware_ngfw,device_license
+P0025,Prisma Access Mobile Users SKU-0025,sase,seats
+P0026,PA-410 SKU-0026,hardware_ngfw,device_license
+P0027,VM-100 SKU-0027,software_ngfw,credits
+P0028,Prisma Access Mobile Users SKU-0028,sase,seats
+P0029,Prisma Access Mobile Users SKU-0029,sase,seats
+P0030,Prisma Access Browser SKU-0030,sase,seats
+P0031,CN-Series SKU-0031,software_ngfw,credits
+P0032,VM-700 SKU-0032,software_ngfw,credits
+P0033,VM-500 SKU-0033,software_ngfw,credits
+P0034,Prisma Access Mobile Users SKU-0034,sase,seats
+P0035,VM-700 SKU-0035,software_ngfw,credits
+P0036,PA-410 SKU-0036,hardware_ngfw,device_license
+P0037,VM-700 SKU-0037,software_ngfw,credits
+P0038,PA-3410 SKU-0038,hardware_ngfw,device_license
+P0039,VM-100 SKU-0039,software_ngfw,credits
+P0040,CN-Series SKU-0040,software_ngfw,credits
+P0041,VM-300 SKU-0041,software_ngfw,credits
+P0042,Cloud NGFW for Azure SKU-0042,cloud_ngfw,usage_units
+P0043,PA-460 SKU-0043,hardware_ngfw,device_license
+P0044,VM-100 SKU-0044,software_ngfw,credits
+P0045,CN-Series SKU-0045,software_ngfw,credits
+P0046,PA-5445 SKU-0046,hardware_ngfw,device_license
+P0047,Cloud NGFW for Azure SKU-0047,cloud_ngfw,usage_units
+P0048,PA-1410 SKU-0048,hardware_ngfw,device_license
+P0049,VM-300 SKU-0049,software_ngfw,credits
+P0050,VM-100 SKU-0050,software_ngfw,credits
+P0051,VM-500 SKU-0051,software_ngfw,credits
+P0052,Prisma Access Browser SKU-0052,sase,seats
+P0053,Prisma Access Remote Networks SKU-0053,sase,seats
+P0054,PA-440 SKU-0054,hardware_ngfw,device_license
+P0055,PA-440 SKU-0055,hardware_ngfw,device_license
+P0056,Prisma Access Mobile Users SKU-0056,sase,seats
+P0057,Prisma Access Mobile Users SKU-0057,sase,seats
+P0058,Prisma Access Remote Networks SKU-0058,sase,seats
+P0059,VM-500 SKU-0059,software_ngfw,credits
+P0060,PA-1410 SKU-0060,hardware_ngfw,device_license
+P0061,Prisma Access Remote Networks SKU-0061,sase,seats
+P0062,Prisma Access Mobile Users SKU-0062,sase,seats
+P0063,PA-7500 SKU-0063,hardware_ngfw,device_license
+P0064,Prisma Access Mobile Users SKU-0064,sase,seats
+P0065,CN-Series SKU-0065,software_ngfw,credits
+P0066,Prisma Access Browser SKU-0066,sase,seats
+P0067,Cloud NGFW for Azure SKU-0067,cloud_ngfw,usage_units
+P0068,PA-410 SKU-0068,hardware_ngfw,device_license
+P0069,Prisma Access Browser SKU-0069,sase,seats
+P0070,Cloud NGFW for AWS SKU-0070,cloud_ngfw,usage_units
+P0071,PA-5410 SKU-0071,hardware_ngfw,device_license
+P0072,Prisma Access Mobile Users SKU-0072,sase,seats
+P0073,PA-410 SKU-0073,hardware_ngfw,device_license
+P0074,VM-700 SKU-0074,software_ngfw,credits
+P0075,Prisma Access Remote Networks SKU-0075,sase,seats
+P0076,PA-460 SKU-0076,hardware_ngfw,device_license
+P0077,VM-700 SKU-0077,software_ngfw,credits
+P0078,Cloud NGFW for AWS SKU-0078,cloud_ngfw,usage_units
+P0079,PA-5410 SKU-0079,hardware_ngfw,device_license
+P0080,Cloud NGFW for AWS SKU-0080,cloud_ngfw,usage_units
+P0081,Cloud NGFW for AWS SKU-0081,cloud_ngfw,usage_units
+P0082,CN-Series SKU-0082,software_ngfw,credits
+P0083,PA-7500 SKU-0083,hardware_ngfw,device_license
+P0084,CN-Series SKU-0084,software_ngfw,credits
+P0085,Prisma Access Browser SKU-0085,sase,seats
+P0086,Prisma Access Browser SKU-0086,sase,seats
+P0087,PA-5410 SKU-0087,hardware_ngfw,device_license
+P0088,Cloud NGFW for Azure SKU-0088,cloud_ngfw,usage_units
+P0089,CN-Series SKU-0089,software_ngfw,credits
+P0090,VM-300 SKU-0090,software_ngfw,credits
+P0091,Cloud NGFW for AWS SKU-0091,cloud_ngfw,usage_units
+P0092,Prisma Access Mobile Users SKU-0092,sase,seats
+P0093,PA-5410 SKU-0093,hardware_ngfw,device_license
+P0094,VM-300 SKU-0094,software_ngfw,credits
+P0095,VM-500 SKU-0095,software_ngfw,credits
+P0096,Prisma Access Mobile Users SKU-0096,sase,seats
+P0097,VM-500 SKU-0097,software_ngfw,credits
+P0098,CN-Series SKU-0098,software_ngfw,credits
+P0099,VM-700 SKU-0099,software_ngfw,credits
+P0100,PA-5410 SKU-0100,hardware_ngfw,device_license
+P0101,Cloud NGFW for Azure SKU-0101,cloud_ngfw,usage_units
+P0102,VM-700 SKU-0102,software_ngfw,credits
+P0103,PA-3440 SKU-0103,hardware_ngfw,device_license
+P0104,Prisma Access Remote Networks SKU-0104,sase,seats
+P0105,Cloud NGFW for AWS SKU-0105,cloud_ngfw,usage_units
+P0106,CN-Series SKU-0106,software_ngfw,credits
+P0107,PA-1410 SKU-0107,hardware_ngfw,device_license
+P0108,PA-7500 SKU-0108,hardware_ngfw,device_license
+P0109,Prisma Access Browser SKU-0109,sase,seats
+P0110,VM-100 SKU-0110,software_ngfw,credits
+P0111,VM-100 SKU-0111,software_ngfw,credits
+P0112,PA-410 SKU-0112,hardware_ngfw,device_license
+P0113,PA-3440 SKU-0113,hardware_ngfw,device_license
+P0114,Prisma Access Mobile Users SKU-0114,sase,seats
+P0115,Cloud NGFW for AWS SKU-0115,cloud_ngfw,usage_units
+P0116,CN-Series SKU-0116,software_ngfw,credits
+P0117,Cloud NGFW for AWS SKU-0117,cloud_ngfw,usage_units
+P0118,PA-460 SKU-0118,hardware_ngfw,device_license
+P0119,Cloud NGFW for Azure SKU-0119,cloud_ngfw,usage_units
+P0120,PA-410 SKU-0120,hardware_ngfw,device_license
+P0121,Prisma Access Browser SKU-0121,sase,seats
+P0122,Cloud NGFW for Azure SKU-0122,cloud_ngfw,usage_units
+P0123,VM-100 SKU-0123,software_ngfw,credits
+P0124,Cloud NGFW for Azure SKU-0124,cloud_ngfw,usage_units
+P0125,Cloud NGFW for Azure SKU-0125,cloud_ngfw,usage_units
+P0126,VM-700 SKU-0126,software_ngfw,credits
+P0127,VM-300 SKU-0127,software_ngfw,credits
+P0128,PA-5445 SKU-0128,hardware_ngfw,device_license
+P0129,VM-300 SKU-0129,software_ngfw,credits
+P0130,PA-3410 SKU-0130,hardware_ngfw,device_license
+P0131,Cloud NGFW for Azure SKU-0131,cloud_ngfw,usage_units
+P0132,VM-100 SKU-0132,software_ngfw,credits
+P0133,PA-3410 SKU-0133,hardware_ngfw,device_license
+P0134,Prisma Access Mobile Users SKU-0134,sase,seats
+P0135,PA-460 SKU-0135,hardware_ngfw,device_license
+P0136,Prisma Access Remote Networks SKU-0136,sase,seats
+P0137,CN-Series SKU-0137,software_ngfw,credits
+P0138,Prisma Access Remote Networks SKU-0138,sase,seats
+P0139,PA-440 SKU-0139,hardware_ngfw,device_license
+P0140,CN-Series SKU-0140,software_ngfw,credits
+P0141,PA-410 SKU-0141,hardware_ngfw,device_license
+P0142,Prisma Access Remote Networks SKU-0142,sase,seats
+P0143,Cloud NGFW for AWS SKU-0143,cloud_ngfw,usage_units
+P0144,VM-300 SKU-0144,software_ngfw,credits
+P0145,VM-500 SKU-0145,software_ngfw,credits
+P0146,Prisma Access Mobile Users SKU-0146,sase,seats
+P0147,PA-7500 SKU-0147,hardware_ngfw,device_license
+P0148,VM-100 SKU-0148,software_ngfw,credits
+P0149,PA-5410 SKU-0149,hardware_ngfw,device_license
+P0150,Cloud NGFW for AWS SKU-0150,cloud_ngfw,usage_units
+P0151,CN-Series SKU-0151,software_ngfw,credits
+P0152,Cloud NGFW for AWS SKU-0152,cloud_ngfw,usage_units
+P0153,CN-Series SKU-0153,software_ngfw,credits
+P0154,Cloud NGFW for Azure SKU-0154,cloud_ngfw,usage_units
+P0155,CN-Series SKU-0155,software_ngfw,credits
+P0156,VM-100 SKU-0156,software_ngfw,credits
+P0157,Cloud NGFW for AWS SKU-0157,cloud_ngfw,usage_units
+P0158,PA-410 SKU-0158,hardware_ngfw,device_license
+P0159,Prisma Access Remote Networks SKU-0159,sase,seats
+P0160,VM-300 SKU-0160,software_ngfw,credits
+P0161,VM-500 SKU-0161,software_ngfw,credits
+P0162,VM-700 SKU-0162,software_ngfw,credits
+P0163,Prisma Access Mobile Users SKU-0163,sase,seats
+P0164,PA-7500 SKU-0164,hardware_ngfw,device_license
+P0165,CN-Series SKU-0165,software_ngfw,credits
+P0166,Prisma Access Remote Networks SKU-0166,sase,seats
+P0167,Prisma Access Browser SKU-0167,sase,seats
+P0168,PA-440 SKU-0168,hardware_ngfw,device_license
+P0169,VM-300 SKU-0169,software_ngfw,credits
+P0170,Prisma Access Browser SKU-0170,sase,seats
+P0171,VM-300 SKU-0171,software_ngfw,credits
+P0172,VM-100 SKU-0172,software_ngfw,credits
+P0173,Prisma Access Remote Networks SKU-0173,sase,seats
+P0174,Prisma Access Browser SKU-0174,sase,seats
+P0175,Prisma Access Mobile Users SKU-0175,sase,seats
+P0176,PA-5445 SKU-0176,hardware_ngfw,device_license
+P0177,Prisma Access Mobile Users SKU-0177,sase,seats
+P0178,PA-5445 SKU-0178,hardware_ngfw,device_license
+P0179,PA-3440 SKU-0179,hardware_ngfw,device_license
+P0180,CN-Series SKU-0180,software_ngfw,credits
+P0181,PA-460 SKU-0181,hardware_ngfw,device_license
+P0182,VM-500 SKU-0182,software_ngfw,credits
+P0183,PA-5445 SKU-0183,hardware_ngfw,device_license
+P0184,PA-1410 SKU-0184,hardware_ngfw,device_license
+P0185,VM-500 SKU-0185,software_ngfw,credits
+P0186,Cloud NGFW for AWS SKU-0186,cloud_ngfw,usage_units
+P0187,Prisma Access Remote Networks SKU-0187,sase,seats
+P0188,Prisma Access Browser SKU-0188,sase,seats
+P0189,PA-3410 SKU-0189,hardware_ngfw,device_license
+P0190,VM-300 SKU-0190,software_ngfw,credits
+P0191,PA-3410 SKU-0191,hardware_ngfw,device_license
+P0192,CN-Series SKU-0192,software_ngfw,credits
+P0193,VM-300 SKU-0193,software_ngfw,credits
+P0194,Cloud NGFW for AWS SKU-0194,cloud_ngfw,usage_units
+P0195,CN-Series SKU-0195,software_ngfw,credits
+P0196,VM-300 SKU-0196,software_ngfw,credits
+P0197,Prisma Access Mobile Users SKU-0197,sase,seats
+P0198,Prisma Access Remote Networks SKU-0198,sase,seats
+P0199,PA-410 SKU-0199,hardware_ngfw,device_license
+P0200,PA-410 SKU-0200,hardware_ngfw,device_license
+P0201,PA-460 SKU-0201,hardware_ngfw,device_license
+P0202,PA-5445 SKU-0202,hardware_ngfw,device_license
+P0203,VM-300 SKU-0203,software_ngfw,credits
+P0204,Prisma Access Remote Networks SKU-0204,sase,seats
+P0205,CN-Series SKU-0205,software_ngfw,credits
+P0206,PA-5445 SKU-0206,hardware_ngfw,device_license
+P0207,PA-460 SKU-0207,hardware_ngfw,device_license
+P0208,Cloud NGFW for Azure SKU-0208,cloud_ngfw,usage_units
+P0209,Prisma Access Mobile Users SKU-0209,sase,seats
+P0210,Cloud NGFW for Azure SKU-0210,cloud_ngfw,usage_units
+P0211,VM-100 SKU-0211,software_ngfw,credits
+P0212,Prisma Access Remote Networks SKU-0212,sase,seats
+P0213,VM-100 SKU-0213,software_ngfw,credits
+P0214,PA-7500 SKU-0214,hardware_ngfw,device_license
+P0215,Cloud NGFW for Azure SKU-0215,cloud_ngfw,usage_units
+P0216,VM-300 SKU-0216,software_ngfw,credits
+P0217,Prisma Access Mobile Users SKU-0217,sase,seats
+P0218,VM-700 SKU-0218,software_ngfw,credits
+P0219,VM-300 SKU-0219,software_ngfw,credits
+P0220,VM-100 SKU-0220,software_ngfw,credits
+P0221,VM-300 SKU-0221,software_ngfw,credits
+P0222,PA-3440 SKU-0222,hardware_ngfw,device_license
+P0223,Cloud NGFW for Azure SKU-0223,cloud_ngfw,usage_units
+P0224,VM-500 SKU-0224,software_ngfw,credits
+P0225,Cloud NGFW for AWS SKU-0225,cloud_ngfw,usage_units
+P0226,Cloud NGFW for AWS SKU-0226,cloud_ngfw,usage_units
+P0227,PA-3440 SKU-0227,hardware_ngfw,device_license
+P0228,VM-700 SKU-0228,software_ngfw,credits
+P0229,Cloud NGFW for Azure SKU-0229,cloud_ngfw,usage_units
+P0230,PA-5445 SKU-0230,hardware_ngfw,device_license
+P0231,Cloud NGFW for AWS SKU-0231,cloud_ngfw,usage_units
+P0232,PA-5445 SKU-0232,hardware_ngfw,device_license
+P0233,Prisma Access Browser SKU-0233,sase,seats
+P0234,Cloud NGFW for Azure SKU-0234,cloud_ngfw,usage_units
+P0235,Cloud NGFW for Azure SKU-0235,cloud_ngfw,usage_units
+P0236,PA-3440 SKU-0236,hardware_ngfw,device_license
+P0237,PA-5445 SKU-0237,hardware_ngfw,device_license
+P0238,Prisma Access Remote Networks SKU-0238,sase,seats
+P0239,Cloud NGFW for AWS SKU-0239,cloud_ngfw,usage_units
+P0240,VM-300 SKU-0240,software_ngfw,credits
+P0241,PA-3410 SKU-0241,hardware_ngfw,device_license
+P0242,PA-3440 SKU-0242,hardware_ngfw,device_license
+P0243,Prisma Access Mobile Users SKU-0243,sase,seats
+P0244,Prisma Access Browser SKU-0244,sase,seats
+P0245,Prisma Access Remote Networks SKU-0245,sase,seats
+P0246,PA-3410 SKU-0246,hardware_ngfw,device_license
+P0247,VM-700 SKU-0247,software_ngfw,credits
+P0248,VM-500 SKU-0248,software_ngfw,credits
+P0249,PA-440 SKU-0249,hardware_ngfw,device_license
+P0250,CN-Series SKU-0250,software_ngfw,credits
+P0251,PA-440 SKU-0251,hardware_ngfw,device_license
+P0252,VM-300 SKU-0252,software_ngfw,credits
+P0253,PA-3410 SKU-0253,hardware_ngfw,device_license
+P0254,PA-7500 SKU-0254,hardware_ngfw,device_license
+P0255,VM-500 SKU-0255,software_ngfw,credits
+P0256,VM-100 SKU-0256,software_ngfw,credits
+P0257,Cloud NGFW for Azure SKU-0257,cloud_ngfw,usage_units
+P0258,Cloud NGFW for Azure SKU-0258,cloud_ngfw,usage_units
+P0259,Cloud NGFW for AWS SKU-0259,cloud_ngfw,usage_units
+P0260,Cloud NGFW for Azure SKU-0260,cloud_ngfw,usage_units
+P0261,VM-100 SKU-0261,software_ngfw,credits
+P0262,Prisma Access Remote Networks SKU-0262,sase,seats
+P0263,PA-5445 SKU-0263,hardware_ngfw,device_license
+P0264,Prisma Access Mobile Users SKU-0264,sase,seats
+P0265,PA-460 SKU-0265,hardware_ngfw,device_license
+P0266,PA-3410 SKU-0266,hardware_ngfw,device_license
+P0267,PA-1410 SKU-0267,hardware_ngfw,device_license
+P0268,VM-300 SKU-0268,software_ngfw,credits
+P0269,VM-500 SKU-0269,software_ngfw,credits
+P0270,Prisma Access Mobile Users SKU-0270,sase,seats
+P0271,Prisma Access Browser SKU-0271,sase,seats
+P0272,VM-100 SKU-0272,software_ngfw,credits
+P0273,Cloud NGFW for AWS SKU-0273,cloud_ngfw,usage_units
+P0274,CN-Series SKU-0274,software_ngfw,credits
+P0275,Cloud NGFW for AWS SKU-0275,cloud_ngfw,usage_units
+P0276,VM-500 SKU-0276,software_ngfw,credits
+P0277,Prisma Access Remote Networks SKU-0277,sase,seats
+P0278,PA-410 SKU-0278,hardware_ngfw,device_license
+P0279,VM-500 SKU-0279,software_ngfw,credits
+P0280,Prisma Access Remote Networks SKU-0280,sase,seats
+P0281,Prisma Access Mobile Users SKU-0281,sase,seats
+P0282,PA-5410 SKU-0282,hardware_ngfw,device_license
+P0283,PA-1410 SKU-0283,hardware_ngfw,device_license
+P0284,VM-300 SKU-0284,software_ngfw,credits
+P0285,VM-300 SKU-0285,software_ngfw,credits
+P0286,CN-Series SKU-0286,software_ngfw,credits
+P0287,PA-1410 SKU-0287,hardware_ngfw,device_license
+P0288,VM-700 SKU-0288,software_ngfw,credits
+P0289,CN-Series SKU-0289,software_ngfw,credits
+P0290,CN-Series SKU-0290,software_ngfw,credits
+P0291,PA-440 SKU-0291,hardware_ngfw,device_license
+P0292,PA-460 SKU-0292,hardware_ngfw,device_license
+P0293,Prisma Access Remote Networks SKU-0293,sase,seats
+P0294,PA-3410 SKU-0294,hardware_ngfw,device_license
+P0295,Prisma Access Remote Networks SKU-0295,sase,seats
+P0296,Cloud NGFW for Azure SKU-0296,cloud_ngfw,usage_units
+P0297,PA-5410 SKU-0297,hardware_ngfw,device_license
+P0298,VM-500 SKU-0298,software_ngfw,credits
+P0299,PA-5445 SKU-0299,hardware_ngfw,device_license
+P0300,VM-100 SKU-0300,software_ngfw,credits
+P0301,PA-5445 SKU-0301,hardware_ngfw,device_license
+P0302,Cloud NGFW for Azure SKU-0302,cloud_ngfw,usage_units
+P0303,PA-1410 SKU-0303,hardware_ngfw,device_license
+P0304,Prisma Access Mobile Users SKU-0304,sase,seats
+P0305,Prisma Access Remote Networks SKU-0305,sase,seats
+P0306,Prisma Access Browser SKU-0306,sase,seats
+P0307,Prisma Access Remote Networks SKU-0307,sase,seats
+P0308,PA-5445 SKU-0308,hardware_ngfw,device_license
+P0309,Prisma Access Browser SKU-0309,sase,seats
+P0310,CN-Series SKU-0310,software_ngfw,credits
+P0311,Cloud NGFW for Azure SKU-0311,cloud_ngfw,usage_units
+P0312,PA-5410 SKU-0312,hardware_ngfw,device_license
+P0313,Cloud NGFW for AWS SKU-0313,cloud_ngfw,usage_units
+P0314,VM-500 SKU-0314,software_ngfw,credits
+P0315,CN-Series SKU-0315,software_ngfw,credits
+P0316,CN-Series SKU-0316,software_ngfw,credits
+P0317,VM-700 SKU-0317,software_ngfw,credits
+P0318,Prisma Access Remote Networks SKU-0318,sase,seats
+P0319,VM-700 SKU-0319,software_ngfw,credits
+P0320,VM-500 SKU-0320,software_ngfw,credits
+P0321,Cloud NGFW for AWS SKU-0321,cloud_ngfw,usage_units
+P0322,VM-300 SKU-0322,software_ngfw,credits
+P0323,Cloud NGFW for Azure SKU-0323,cloud_ngfw,usage_units
+P0324,PA-460 SKU-0324,hardware_ngfw,device_license
+P0325,PA-7500 SKU-0325,hardware_ngfw,device_license
+P0326,CN-Series SKU-0326,software_ngfw,credits
+P0327,Cloud NGFW for AWS SKU-0327,cloud_ngfw,usage_units
+P0328,Prisma Access Browser SKU-0328,sase,seats
+P0329,Prisma Access Remote Networks SKU-0329,sase,seats
+P0330,Prisma Access Browser SKU-0330,sase,seats
+P0331,Cloud NGFW for AWS SKU-0331,cloud_ngfw,usage_units
+P0332,PA-3440 SKU-0332,hardware_ngfw,device_license
+P0333,Cloud NGFW for AWS SKU-0333,cloud_ngfw,usage_units
+P0334,Cloud NGFW for AWS SKU-0334,cloud_ngfw,usage_units
+P0335,PA-5410 SKU-0335,hardware_ngfw,device_license
+P0336,VM-500 SKU-0336,software_ngfw,credits
+P0337,CN-Series SKU-0337,software_ngfw,credits
+P0338,Prisma Access Mobile Users SKU-0338,sase,seats
+P0339,VM-500 SKU-0339,software_ngfw,credits
+P0340,PA-460 SKU-0340,hardware_ngfw,device_license
+P0341,VM-300 SKU-0341,software_ngfw,credits
+P0342,VM-100 SKU-0342,software_ngfw,credits
+P0343,VM-500 SKU-0343,software_ngfw,credits
+P0344,PA-410 SKU-0344,hardware_ngfw,device_license
+P0345,VM-500 SKU-0345,software_ngfw,credits
+P0346,VM-300 SKU-0346,software_ngfw,credits
+P0347,Cloud NGFW for Azure SKU-0347,cloud_ngfw,usage_units
+P0348,VM-700 SKU-0348,software_ngfw,credits
+P0349,Prisma Access Browser SKU-0349,sase,seats
+P0350,Prisma Access Mobile Users SKU-0350,sase,seats
+P0351,VM-500 SKU-0351,software_ngfw,credits
+P0352,PA-5445 SKU-0352,hardware_ngfw,device_license
+P0353,PA-3410 SKU-0353,hardware_ngfw,device_license
+P0354,PA-410 SKU-0354,hardware_ngfw,device_license
+P0355,VM-300 SKU-0355,software_ngfw,credits
+P0356,Prisma Access Remote Networks SKU-0356,sase,seats
+P0357,Prisma Access Remote Networks SKU-0357,sase,seats
+P0358,Prisma Access Mobile Users SKU-0358,sase,seats
+P0359,PA-5410 SKU-0359,hardware_ngfw,device_license
+P0360,Cloud NGFW for AWS SKU-0360,cloud_ngfw,usage_units
+P0361,Prisma Access Mobile Users SKU-0361,sase,seats
+P0362,PA-460 SKU-0362,hardware_ngfw,device_license
+P0363,PA-460 SKU-0363,hardware_ngfw,device_license
+P0364,VM-700 SKU-0364,software_ngfw,credits
+P0365,Prisma Access Mobile Users SKU-0365,sase,seats
+P0366,Prisma Access Browser SKU-0366,sase,seats
+P0367,PA-440 SKU-0367,hardware_ngfw,device_license
+P0368,VM-700 SKU-0368,software_ngfw,credits
+P0369,Prisma Access Mobile Users SKU-0369,sase,seats
+P0370,VM-100 SKU-0370,software_ngfw,credits
+P0371,VM-700 SKU-0371,software_ngfw,credits
+P0372,PA-3440 SKU-0372,hardware_ngfw,device_license
+P0373,Prisma Access Mobile Users SKU-0373,sase,seats
+P0374,Cloud NGFW for Azure SKU-0374,cloud_ngfw,usage_units
+P0375,Cloud NGFW for AWS SKU-0375,cloud_ngfw,usage_units
+P0376,Prisma Access Mobile Users SKU-0376,sase,seats
+P0377,VM-100 SKU-0377,software_ngfw,credits
+P0378,PA-5445 SKU-0378,hardware_ngfw,device_license
+P0379,Prisma Access Mobile Users SKU-0379,sase,seats
+P0380,PA-3440 SKU-0380,hardware_ngfw,device_license
+P0381,Prisma Access Remote Networks SKU-0381,sase,seats
+P0382,Cloud NGFW for Azure SKU-0382,cloud_ngfw,usage_units
+P0383,Cloud NGFW for Azure SKU-0383,cloud_ngfw,usage_units
+P0384,PA-3440 SKU-0384,hardware_ngfw,device_license
+P0385,Cloud NGFW for AWS SKU-0385,cloud_ngfw,usage_units
+P0386,Prisma Access Mobile Users SKU-0386,sase,seats
+P0387,PA-410 SKU-0387,hardware_ngfw,device_license
+P0388,VM-300 SKU-0388,software_ngfw,credits
+P0389,Prisma Access Mobile Users SKU-0389,sase,seats
+P0390,PA-3410 SKU-0390,hardware_ngfw,device_license
+P0391,PA-3440 SKU-0391,hardware_ngfw,device_license
+P0392,Prisma Access Remote Networks SKU-0392,sase,seats
+P0393,Prisma Access Mobile Users SKU-0393,sase,seats
+P0394,VM-300 SKU-0394,software_ngfw,credits
+P0395,Cloud NGFW for Azure SKU-0395,cloud_ngfw,usage_units
+P0396,VM-300 SKU-0396,software_ngfw,credits
+P0397,VM-300 SKU-0397,software_ngfw,credits
+P0398,PA-410 SKU-0398,hardware_ngfw,device_license
+P0399,PA-1410 SKU-0399,hardware_ngfw,device_license
+P0400,Prisma Access Mobile Users SKU-0400,sase,seats
+P0401,VM-500 SKU-0401,software_ngfw,credits
+P0402,VM-100 SKU-0402,software_ngfw,credits
+P0403,Prisma Access Browser SKU-0403,sase,seats
+P0404,Cloud NGFW for AWS SKU-0404,cloud_ngfw,usage_units
+P0405,Prisma Access Remote Networks SKU-0405,sase,seats
+P0406,PA-5445 SKU-0406,hardware_ngfw,device_license
+P0407,PA-1410 SKU-0407,hardware_ngfw,device_license
+P0408,VM-500 SKU-0408,software_ngfw,credits
+P0409,VM-500 SKU-0409,software_ngfw,credits
+P0410,Prisma Access Browser SKU-0410,sase,seats
+P0411,VM-300 SKU-0411,software_ngfw,credits
+P0412,Prisma Access Remote Networks SKU-0412,sase,seats
+P0413,PA-7500 SKU-0413,hardware_ngfw,device_license
+P0414,VM-100 SKU-0414,software_ngfw,credits
+P0415,VM-500 SKU-0415,software_ngfw,credits
+P0416,VM-100 SKU-0416,software_ngfw,credits
+P0417,PA-460 SKU-0417,hardware_ngfw,device_license
+P0418,PA-460 SKU-0418,hardware_ngfw,device_license
+P0419,PA-440 SKU-0419,hardware_ngfw,device_license
+P0420,PA-3410 SKU-0420,hardware_ngfw,device_license
+P0421,PA-410 SKU-0421,hardware_ngfw,device_license
+P0422,PA-7500 SKU-0422,hardware_ngfw,device_license
+P0423,VM-700 SKU-0423,software_ngfw,credits
+P0424,VM-500 SKU-0424,software_ngfw,credits
+P0425,Prisma Access Mobile Users SKU-0425,sase,seats
+P0426,Prisma Access Mobile Users SKU-0426,sase,seats
+P0427,Prisma Access Remote Networks SKU-0427,sase,seats
+P0428,Cloud NGFW for Azure SKU-0428,cloud_ngfw,usage_units
+P0429,VM-500 SKU-0429,software_ngfw,credits
+P0430,Cloud NGFW for AWS SKU-0430,cloud_ngfw,usage_units
+P0431,Prisma Access Remote Networks SKU-0431,sase,seats
+P0432,VM-100 SKU-0432,software_ngfw,credits
+P0433,PA-3410 SKU-0433,hardware_ngfw,device_license
+P0434,CN-Series SKU-0434,software_ngfw,credits
+P0435,Prisma Access Browser SKU-0435,sase,seats
+P0436,Cloud NGFW for Azure SKU-0436,cloud_ngfw,usage_units
+P0437,CN-Series SKU-0437,software_ngfw,credits
+P0438,VM-700 SKU-0438,software_ngfw,credits
+P0439,Prisma Access Remote Networks SKU-0439,sase,seats
+P0440,VM-100 SKU-0440,software_ngfw,credits
+P0441,Prisma Access Browser SKU-0441,sase,seats
+P0442,CN-Series SKU-0442,software_ngfw,credits
+P0443,PA-3410 SKU-0443,hardware_ngfw,device_license
+P0444,VM-300 SKU-0444,software_ngfw,credits
+P0445,Prisma Access Browser SKU-0445,sase,seats
+P0446,VM-100 SKU-0446,software_ngfw,credits
+P0447,VM-100 SKU-0447,software_ngfw,credits
+P0448,Prisma Access Mobile Users SKU-0448,sase,seats
+P0449,Cloud NGFW for Azure SKU-0449,cloud_ngfw,usage_units
+P0450,Cloud NGFW for Azure SKU-0450,cloud_ngfw,usage_units
+P0451,PA-440 SKU-0451,hardware_ngfw,device_license
+P0452,PA-5410 SKU-0452,hardware_ngfw,device_license
+P0453,PA-440 SKU-0453,hardware_ngfw,device_license
+P0454,Cloud NGFW for AWS SKU-0454,cloud_ngfw,usage_units
+P0455,PA-1410 SKU-0455,hardware_ngfw,device_license
+P0456,PA-410 SKU-0456,hardware_ngfw,device_license
+P0457,CN-Series SKU-0457,software_ngfw,credits
+P0458,VM-700 SKU-0458,software_ngfw,credits
+P0459,Cloud NGFW for Azure SKU-0459,cloud_ngfw,usage_units
+P0460,PA-5410 SKU-0460,hardware_ngfw,device_license
+P0461,VM-100 SKU-0461,software_ngfw,credits
+P0462,PA-460 SKU-0462,hardware_ngfw,device_license
+P0463,VM-300 SKU-0463,software_ngfw,credits
+P0464,PA-3410 SKU-0464,hardware_ngfw,device_license
+P0465,PA-410 SKU-0465,hardware_ngfw,device_license
+P0466,Cloud NGFW for AWS SKU-0466,cloud_ngfw,usage_units
+P0467,VM-100 SKU-0467,software_ngfw,credits
+P0468,VM-700 SKU-0468,software_ngfw,credits
+P0469,PA-3410 SKU-0469,hardware_ngfw,device_license
+P0470,Prisma Access Browser SKU-0470,sase,seats
+P0471,VM-500 SKU-0471,software_ngfw,credits
+P0472,Cloud NGFW for Azure SKU-0472,cloud_ngfw,usage_units
+P0473,PA-1410 SKU-0473,hardware_ngfw,device_license
+P0474,PA-5445 SKU-0474,hardware_ngfw,device_license
+P0475,Cloud NGFW for AWS SKU-0475,cloud_ngfw,usage_units
+P0476,PA-460 SKU-0476,hardware_ngfw,device_license
+P0477,VM-300 SKU-0477,software_ngfw,credits
+P0478,PA-7500 SKU-0478,hardware_ngfw,device_license
+P0479,PA-410 SKU-0479,hardware_ngfw,device_license
+P0480,Cloud NGFW for Azure SKU-0480,cloud_ngfw,usage_units
+P0481,CN-Series SKU-0481,software_ngfw,credits
+P0482,Prisma Access Browser SKU-0482,sase,seats
+P0483,Cloud NGFW for AWS SKU-0483,cloud_ngfw,usage_units
+P0484,VM-100 SKU-0484,software_ngfw,credits
+P0485,PA-460 SKU-0485,hardware_ngfw,device_license
+P0486,Prisma Access Remote Networks SKU-0486,sase,seats
+P0487,Cloud NGFW for AWS SKU-0487,cloud_ngfw,usage_units
+P0488,Prisma Access Remote Networks SKU-0488,sase,seats
+P0489,Prisma Access Mobile Users SKU-0489,sase,seats
+P0490,VM-100 SKU-0490,software_ngfw,credits
+P0491,Cloud NGFW for AWS SKU-0491,cloud_ngfw,usage_units
+P0492,PA-7500 SKU-0492,hardware_ngfw,device_license
+P0493,VM-500 SKU-0493,software_ngfw,credits
+P0494,PA-7500 SKU-0494,hardware_ngfw,device_license
+P0495,PA-440 SKU-0495,hardware_ngfw,device_license
+P0496,Cloud NGFW for AWS SKU-0496,cloud_ngfw,usage_units
+P0497,VM-100 SKU-0497,software_ngfw,credits
+P0498,VM-500 SKU-0498,software_ngfw,credits
+P0499,PA-3440 SKU-0499,hardware_ngfw,device_license
+P0500,PA-3410 SKU-0500,hardware_ngfw,device_license

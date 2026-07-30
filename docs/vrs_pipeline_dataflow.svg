@@ -1,0 +1,94 @@
+<svg width="100%" viewBox="0 0 680 336" role="img" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<title>VRS pipeline data flow</title>
+<desc>Six raw tables feed two staging views and the marts; staging feeds an intermediate components view; that feeds the customer-SKU scorecard, which rolls up ARR-weighted to customer and product marts. A feature-detail mart comes from the feature staging view.</desc>
+<defs>
+  <marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+    <path d="M0,0 L6.5,3 L0,6 Z" fill="#5F6368"/>
+  </marker>
+</defs>
+
+<!-- tier headers -->
+<g fill="#5F6368" font-size="12" text-anchor="middle">
+  <text x="69" y="20">raw tables</text>
+  <text x="236" y="20">staging (views)</text>
+  <text x="404" y="20">intermediate (view)</text>
+  <text x="594" y="20">marts (tables)</text>
+</g>
+
+<!-- arrows -->
+<g fill="none" stroke="#5F6368" stroke-width="1.5">
+  <path d="M128,57 L172,66" marker-end="url(#ah)"/>
+  <path d="M128,99 L172,132" marker-end="url(#ah)"/>
+  <path d="M128,141 L172,138" marker-end="url(#ah)"/>
+  <path d="M300,66 L344,99" marker-end="url(#ah)"/>
+  <path d="M300,135 L344,103" marker-end="url(#ah)"/>
+  <path d="M464,101 L520,60" marker-end="url(#ah)"/>
+  <path d="M128,183 L500,183 L500,60 L518,60" marker-end="url(#ah)"/>
+  <path d="M128,225 L518,122" marker-end="url(#ah)"/>
+  <path d="M128,267 L518,178" marker-end="url(#ah)"/>
+  <path d="M545,76 L545,104" marker-end="url(#ah)"/>
+  <path d="M668,60 L676,60 L676,178 L668,178" marker-end="url(#ah)"/>
+  <path d="M300,138 L518,258" marker-end="url(#ah)"/>
+</g>
+
+<!-- RAW (gray) -->
+<g fill="#E8EAED" stroke="#BDC1C6">
+  <rect x="10" y="44" width="118" height="26" rx="6"/>
+  <rect x="10" y="86" width="118" height="26" rx="6"/>
+  <rect x="10" y="128" width="118" height="26" rx="6"/>
+  <rect x="10" y="170" width="118" height="26" rx="6"/>
+  <rect x="10" y="212" width="118" height="26" rx="6"/>
+  <rect x="10" y="254" width="118" height="26" rx="6"/>
+</g>
+<g fill="#3C4043" font-size="13" text-anchor="middle">
+  <text x="69" y="61">Consumption</text>
+  <text x="69" y="103">Feature usage</text>
+  <text x="69" y="145">Features</text>
+  <text x="69" y="187">Entitlements</text>
+  <text x="69" y="229">Customers</text>
+  <text x="69" y="271">Products</text>
+</g>
+
+<!-- STAGING + INTERMEDIATE (blue = views) -->
+<g fill="#D2E3FC" stroke="#A8C7FA">
+  <rect x="172" y="50" width="128" height="34" rx="6"/>
+  <rect x="172" y="118" width="128" height="34" rx="6"/>
+  <rect x="344" y="84" width="120" height="34" rx="6"/>
+</g>
+<g fill="#174EA6" text-anchor="middle">
+  <text x="236" y="66" font-size="13">SKU usage / month</text>
+  <text x="236" y="80" font-size="11">stg_sku_month</text>
+  <text x="236" y="134" font-size="13">Feature scores</text>
+  <text x="236" y="148" font-size="11">stg_feature_month</text>
+  <text x="404" y="100" font-size="13">VRS components</text>
+  <text x="404" y="114" font-size="11">int_sku_components</text>
+</g>
+
+<!-- MARTS (green = tables) -->
+<g fill="#CEEAD6" stroke="#A8DAB5">
+  <rect x="520" y="42" width="148" height="34" rx="6"/>
+  <rect x="520" y="104" width="148" height="34" rx="6"/>
+  <rect x="520" y="160" width="148" height="34" rx="6"/>
+  <rect x="520" y="244" width="148" height="34" rx="6"/>
+</g>
+<g fill="#0D652D" text-anchor="middle">
+  <text x="594" y="58" font-size="13">SKU scorecard (VRS)</text>
+  <text x="594" y="72" font-size="11">customer_sku_month</text>
+  <text x="594" y="120" font-size="13">Customer scores</text>
+  <text x="594" y="134" font-size="11">customer_month</text>
+  <text x="594" y="176" font-size="13">Product scores</text>
+  <text x="594" y="190" font-size="11">product_month</text>
+  <text x="594" y="260" font-size="13">Feature detail</text>
+  <text x="594" y="274" font-size="11">customer_feature_month</text>
+</g>
+
+<!-- legend -->
+<g font-size="11" fill="#5F6368">
+  <rect x="150" y="300" width="16" height="12" rx="3" fill="#E8EAED" stroke="#BDC1C6"/>
+  <text x="172" y="310">raw source</text>
+  <rect x="252" y="300" width="16" height="12" rx="3" fill="#D2E3FC" stroke="#A8C7FA"/>
+  <text x="274" y="310">view (computed live)</text>
+  <rect x="420" y="300" width="16" height="12" rx="3" fill="#CEEAD6" stroke="#A8DAB5"/>
+  <text x="442" y="310">table (materialized mart)</text>
+</g>
+</svg>
