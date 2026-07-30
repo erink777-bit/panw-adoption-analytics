@@ -204,7 +204,7 @@ def vpct(x):   # a 0-100 VRS shown as a percent
 
 
 # red -> yellow -> green gradient for score cells (light tints, dark text)
-_GRAD_LO, _GRAD_MID, _GRAD_HI = (243, 197, 193), (255, 241, 191), (198, 231, 200)
+_GRAD_LO, _GRAD_MID, _GRAD_HI = (249, 228, 225), (251, 244, 224), (228, 240, 229)
 
 
 def _grad(t):
