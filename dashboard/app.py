@@ -458,14 +458,25 @@ with tab_p:
 
     # ---- item 11: trimmed collapsible band reference ----
     with st.expander("VRS ranges — what the bands mean"):
-        _ranges = pd.DataFrame([
-            {"Band": "Value Realized", "Range": "70–100%", "Meaning": "Strong value realization"},
-            {"Band": "Developing", "Range": "50–69%", "Meaning": "Partial value"},
-            {"Band": "At Risk", "Range": "30–49%", "Meaning": "Largely unrealized"},
-            {"Band": "Critical", "Range": "0–29%", "Meaning": "Near-dormant"},
-        ])
-        st.dataframe(_ranges.style.map(_band_bg, subset=["Band"]),
-                     width="stretch", hide_index=True)
+        _ranges = [
+            ("Value Realized", "70–100%", "All four signals healthy — strong utilization plus broad, sustained adoption."),
+            ("Developing", "50–69%", "Partial value — solid utilization but thin feature adoption or patchy usage."),
+            ("At Risk", "30–49%", "Largely unrealized — several signals weak at once."),
+            ("Critical", "0–29%", "Near-dormant — shelfware or a collapsed / lapsed account."),
+        ]
+        _rrows = "".join(
+            f"<tr style='border-bottom:1px solid #eef1f6'>"
+            f"<td style='padding:8px 10px'><span style='background:{BAND_TINT[b]};color:{BAND_PLAIN[b]};"
+            f"padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap'>{b}</span></td>"
+            f"<td style='padding:8px 10px;font-weight:700;color:#1B2338;white-space:nowrap'>{rng}</td>"
+            f"<td style='padding:8px 10px;color:#6B7690'>{mean}</td></tr>"
+            for b, rng, mean in _ranges)
+        _rhdr = "".join(f"<th style='text-align:left;padding:6px 10px;color:#6b7690;font-size:12px;"
+                        f"font-weight:600;border-bottom:1px solid #e2e7f1'>{h}</th>"
+                        for h in ["Band", "Range", "Meaning"])
+        st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
+                    f"<thead><tr>{_rhdr}</tr></thead><tbody>{_rrows}</tbody></table>",
+                    unsafe_allow_html=True)
 
     tr = get_trend(segs, regs, plats)
     bt = get_band_trend(segs, regs, plats)
@@ -744,15 +755,15 @@ with tab_c:
     styf = styf.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Feature"])
     styf = styf.format({"Usage events": "{:,.0f}", "Score": "{:.0%}"}, na_rep="-")
     st.dataframe(styf, width="stretch", hide_index=True)
-    _leg = [("not_enabled", "0%", "#EEF1F6", "#57606F"),
-            ("enabled_idle", "30%", BAND_TINT["At Risk"], BAND_TEXT["At Risk"]),
-            ("active", "70%", BAND_TINT["Developing"], BAND_TEXT["Developing"]),
-            ("deep", "100%", BAND_TINT["Value Realized"], BAND_TEXT["Value Realized"])]
-    st.markdown("<div style='display:flex;gap:10px;align-items:center;margin-top:4px;flex-wrap:wrap'>"
-                "<span style='font-size:12px;color:#6b7690'>Adoption levels:</span>"
-                + "".join(f"<span style='background:{bg};color:{fg};padding:2px 10px;border-radius:12px;"
-                          f"font-size:12px;font-weight:600;white-space:nowrap'>{n} · {s}</span>"
-                          for n, s, bg, fg in _leg)
+    _leg = [("not_enabled", "0 events → 0%", "#EEF1F6", "#57606F"),
+            ("enabled_idle", "<20% of expected volume → 30%", BAND_TINT["At Risk"], BAND_TEXT["At Risk"]),
+            ("active", "20–80% of expected → 70%", BAND_TINT["Developing"], BAND_TEXT["Developing"]),
+            ("deep", "80%+ of expected → 100%", BAND_TINT["Value Realized"], BAND_TEXT["Value Realized"])]
+    st.markdown("<div style='display:flex;gap:14px;align-items:center;margin-top:4px;flex-wrap:wrap'>"
+                + "".join(f"<span style='white-space:nowrap'><span style='background:{bg};color:{fg};"
+                          f"padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600'>{n}</span>"
+                          f" <span style='font-size:12px;color:#6b7690'>{d}</span></span>"
+                          for n, d, bg, fg in _leg)
                 + "</div>", unsafe_allow_html=True)
 
 # ------------------------------------------------------------- By Product
@@ -873,15 +884,30 @@ with tab_prod:
 
     with st.expander("How the 4 signals are scored"):
         st.markdown(
-            "**VRS = 35% x License Utilization + 25% x Feature Adoption + 25% x Sustained Usage "
-            "+ 15% x Time to Value** (each 0-100%).\n\n"
-            "| Signal | Weight | What it measures | Range / scoring |\n"
-            "|---|---|---|---|\n"
-            "| **License Utilization** | 35% | Depth of use (consumed / licensed) | ~0% below 0.1 (shelfware) -> "
-            "100% near full use -> capped at 80% above 1.2x (overage) |\n"
-            "| **Feature Adoption** | 25% | Breadth of features used | Avg of per-feature depth (0% not enabled "
-            "-> 100% deep); un-adopted features count as 0 |\n"
-            "| **Sustained Usage** | 25% | Durability (spike vs lasting) | Recency-weighted active over the last "
-            "3 months (50/30/20); all 3 active -> 100%, spike-then-drop -> 20% |\n"
-            "| **Time to Value** | 15% | Speed to first real use | 100% within 30 days -> 0% by 90 days; never "
-            "activated -> 0% |")
+            "<div style='font-size:13.5px;font-weight:600;color:#3D465C;margin:2px 0 10px'>"
+            "VRS = 35% × License Utilization + 25% × Feature Adoption + 25% × Sustained Usage "
+            "+ 15% × Time to Value <span style='color:#6B7690;font-weight:400'>(each 0–100%)</span></div>",
+            unsafe_allow_html=True)
+        _sigrows = [
+            ("License Utilization", "35%", "Depth of use (consumed / licensed)",
+             "~0% below 0.1 (shelfware) → 100% near full use → capped at 80% above 1.2× (overage)"),
+            ("Feature Adoption", "25%", "Breadth of features used",
+             "Avg of per-feature depth (0% not enabled → 100% deep); un-adopted features count as 0"),
+            ("Sustained Usage", "25%", "Durability (spike vs lasting)",
+             "Recency-weighted active over the last 3 months (50/30/20); all 3 active → 100%, spike-then-drop → 20%"),
+            ("Time to Value", "15%", "Speed to first real use",
+             "100% within 30 days → 0% by 90 days; never activated → 0%"),
+        ]
+        _srows = "".join(
+            f"<tr style='border-bottom:1px solid #eef1f6'>"
+            f"<td style='padding:8px 10px;font-weight:600;color:#3D465C;white-space:nowrap'>{s}</td>"
+            f"<td style='padding:8px 10px;font-weight:700;color:#1B2338'>{w}</td>"
+            f"<td style='padding:8px 10px;color:#6B7690;white-space:nowrap'>{m}</td>"
+            f"<td style='padding:8px 10px;color:#6B7690'>{r}</td></tr>"
+            for s, w, m, r in _sigrows)
+        _shdr = "".join(f"<th style='text-align:left;padding:6px 10px;color:#6b7690;font-size:12px;"
+                        f"font-weight:600;border-bottom:1px solid #e2e7f1'>{h}</th>"
+                        for h in ["Signal", "Weight", "What it measures", "Range / scoring"])
+        st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
+                    f"<thead><tr>{_shdr}</tr></thead><tbody>{_srows}</tbody></table>",
+                    unsafe_allow_html=True)
