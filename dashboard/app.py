@@ -416,7 +416,7 @@ with tab_p:
         "<svg width='96' height='56' viewBox='0 0 100 56'>"
         "<path d='M 8 50 A 42 42 0 0 1 92 50' fill='none' stroke='#F3E6DF'"
         " stroke-width='11' stroke-linecap='round'/>"
-        "<path d='M 8 50 A 42 42 0 0 1 92 50' fill='none' stroke='#E8B0A3'"
+        "<path d='M 8 50 A 42 42 0 0 1 92 50' fill='none' stroke='#FA582D'"
         f" stroke-width='11' stroke-linecap='round' stroke-dasharray='{p / 100 * _arclen:.1f} {_arclen}'/>"
         "</svg>")
     vrs_card = _card(
@@ -466,8 +466,7 @@ with tab_p:
         ]
         _rrows = "".join(
             f"<tr style='border-bottom:1px solid #eef1f6'>"
-            f"<td style='padding:8px 10px'><span style='background:{BAND_TINT[b]};color:{BAND_PLAIN[b]};"
-            f"padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap'>{b}</span></td>"
+            f"<td style='padding:8px 10px;color:{BAND_PLAIN[b]};font-weight:600;white-space:nowrap'>{b}</td>"
             f"<td style='padding:8px 10px;font-weight:700;color:#1B2338;white-space:nowrap'>{rng}</td>"
             f"<td style='padding:8px 10px;color:#6B7690'>{mean}</td></tr>"
             for b, rng, mean in _ranges)
@@ -520,35 +519,40 @@ with tab_p:
         st.markdown("**Where the ARR sits today**")
         _mix = "".join(f"<div style='width:{cur_band[b] / total_arr * 100:.2f}%;"
                        f"background:{MIX_FILL[b]}'></div>" for b in _BANDS)
-        st.markdown(f"<div style='display:flex;height:26px;border-radius:8px;overflow:hidden;"
+        st.markdown(f"<div style='display:flex;height:22px;border-radius:999px;overflow:hidden;"
                     f"margin:4px 0 14px'>{_mix}</div>", unsafe_allow_html=True)
 
-        _bcols = st.columns(4)
-        for _i, _b in enumerate(_BANDS):
-            with _bcols[_i]:
-                _dhtml = ""
-                if sh_q is not None:
-                    _d = sh_now[_b] - sh_q[_b]
-                    _ar = "▲" if _d > 0 else ("▼" if _d < 0 else "▬")
-                    _dhtml = (f"<div style='font-size:12px;font-weight:500;color:{DELTA_GREY}'>"
-                              f"{_ar} {abs(_d):.1f}pt</div>")
-                st.markdown(
-                    f"<div style='font-size:12.5px;font-weight:600;color:{BAND_PLAIN[_b]};"
-                    f"white-space:nowrap'>{_b}</div>"
-                    f"<div style='font-size:19px;font-weight:600;color:#3D465C'>{money(cur_band[_b])}</div>"
-                    f"<div style='font-size:12px;color:#6b7690;white-space:nowrap'>"
-                    f"{cur_band[_b] / total_arr * 100:.0f}% of ARR</div>" + _dhtml,
+        def _sparksvg(vals, color):
+            if len(vals) < 2:
+                return ""
+            w, h, pad = 110, 30, 3
+            lo, hi = min(vals), max(vals)
+            rng = (hi - lo) or 1.0
+            pts = " ".join(f"{pad + i * (w - 2 * pad) / (len(vals) - 1):.1f},"
+                           f"{h - pad - (v - lo) / rng * (h - 2 * pad):.1f}"
+                           for i, v in enumerate(vals))
+            return (f"<svg width='{w}' height='{h}' viewBox='0 0 {w} {h}'>"
+                    f"<polyline points='{pts}' fill='none' stroke='{color}' stroke-width='1.6'"
+                    f" stroke-linejoin='round' stroke-linecap='round'/></svg>")
+
+        _cells = ""
+        for _b in _BANDS:
+            _dhtml = "<div style='font-size:12px;font-weight:600;color:#6B7690'>&nbsp;</div>"
+            if sh_q is not None:
+                _d = sh_now[_b] - sh_q[_b]
+                _ar = "▲" if _d > 0 else ("▼" if _d < 0 else "▬")
+                _dhtml = f"<div style='font-size:12px;font-weight:600;color:#6B7690'>{_ar} {abs(_d):.1f}pt</div>"
+            _cells += (
+                "<div style='flex:1;background:#ffffff;border:1px solid #ECEAE4;border-radius:10px;"
+                "padding:10px 12px;min-width:0'>"
+                f"<div style='font-size:12.5px;font-weight:600;color:{BAND_PLAIN[_b]};white-space:nowrap'>{_b}</div>"
+                f"<div style='font-size:20px;font-weight:700;color:#1B2338;margin-top:2px'>{money(cur_band[_b])}</div>"
+                f"<div style='font-size:12px;color:#6b7690;white-space:nowrap'>{cur_band[_b] / total_arr * 100:.0f}% of ARR</div>"
+                + _dhtml
+                + f"<div style='margin-top:6px'>{_sparksvg(list(shares[_b]), SPARK[_b])}</div>"
+                "<div style='font-size:11px;color:#9AA0A6;margin-top:2px'>12-mo share</div></div>")
+        st.markdown(f"<div style='display:flex;gap:12px;align-items:stretch'>{_cells}</div>",
                     unsafe_allow_html=True)
-                _sp = shares[_b].reset_index()
-                _figs = px.line(_sp, x="month", y=_b, color_discrete_sequence=[SPARK[_b]])
-                _figs.update_xaxes(visible=False)
-                _figs.update_yaxes(visible=False)
-                _figs.update_layout(height=44, margin=dict(t=2, b=2, l=2, r=2), showlegend=False,
-                                    plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)")
-                st.plotly_chart(_figs, width="stretch", config=PLOTLY_CONFIG,
-                                key=f"spark_{_b}")
-                st.markdown("<div style='font-size:11px;color:#9AA0A6'>12-mo share</div>",
-                            unsafe_allow_html=True)
         st.caption("Δ = change in share vs last quarter")
 
     with st.container(border=True):
@@ -666,9 +670,9 @@ with tab_c:
     pdisp = prow.rename(columns={"cust_name": "Customer", "segment": "Segment",
                                  "TotalARR": "Total ARR", "ARRatrisk": "ARR at risk"})[
         ["Customer", "Segment", "Play", "Owner", "VRS"] + _sig + ["Total ARR", "ARR at risk"]]
-    _PLAY_CSS = {"Activate": "color:#C77E76;font-weight:500",
+    _PLAY_CSS = {"Activate": "color:#C09A45;font-weight:500",
                  "Win back": "color:#B36259;font-weight:500",
-                 "Upsell": "color:#C09A45;font-weight:500"}
+                 "Upsell": "color:#5E9A6E;font-weight:500"}
     styw = style_scores(pdisp, vrs_cols=["VRS"], sig_cols=_sig, money_cols=["Total ARR", "ARR at risk"])
     styw = styw.map(lambda v: _PLAY_CSS.get(v, ""), subset=["Play"])
     styw = styw.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Customer", "Segment", "Owner", "Total ARR"])
@@ -724,7 +728,8 @@ with tab_c:
         figl.update_layout(title=dict(text=f"{prod_pick} — License Utilization by month",
                                       font=dict(size=15, color="#1b2338")),
                            height=300, xaxis_type="category",
-                           yaxis=dict(tickvals=[0, 0.5, 1.0, 1.2], range=[-0.05, 1.35]),
+                           yaxis=dict(tickvals=[0, 0.5, 1.0, 1.2],
+                                      range=[-0.05, max(1.35, float(ser['lur'].max()) * 1.1)]),
                            yaxis_title="License Utilization (consumed / licensed)",
                            xaxis_title="", margin=dict(t=40, b=10))
         st.plotly_chart(dechrome(figl), width="stretch", config=PLOTLY_CONFIG)
@@ -755,15 +760,14 @@ with tab_c:
     styf = styf.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Feature"])
     styf = styf.format({"Usage events": "{:,.0f}", "Score": "{:.0%}"}, na_rep="-")
     st.dataframe(styf, width="stretch", hide_index=True)
-    _leg = [("not_enabled", "0 events → 0%", "#EEF1F6", "#57606F"),
-            ("enabled_idle", "<20% of expected volume → 30%", BAND_TINT["At Risk"], BAND_TEXT["At Risk"]),
-            ("active", "20–80% of expected → 70%", BAND_TINT["Developing"], BAND_TEXT["Developing"]),
-            ("deep", "80%+ of expected → 100%", BAND_TINT["Value Realized"], BAND_TEXT["Value Realized"])]
-    st.markdown("<div style='display:flex;gap:14px;align-items:center;margin-top:4px;flex-wrap:wrap'>"
-                + "".join(f"<span style='white-space:nowrap'><span style='background:{bg};color:{fg};"
-                          f"padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600'>{n}</span>"
-                          f" <span style='font-size:12px;color:#6b7690'>{d}</span></span>"
-                          for n, d, bg, fg in _leg)
+    _leg = [("not_enabled", "0 events → 0%", "#9AA0A6"),
+            ("enabled_idle", "<20% of expected volume → 30%", BAND_PLAIN["At Risk"]),
+            ("active", "20–80% of expected → 70%", BAND_PLAIN["Developing"]),
+            ("deep", "80%+ of expected → 100%", BAND_PLAIN["Value Realized"])]
+    st.markdown("<div style='font-size:12px;color:#6b7690;margin-top:4px'>Adoption levels: "
+                + " &nbsp;·&nbsp; ".join(
+                    f"<span style='color:{c};font-weight:600'>{n}</span> <span>{d}</span>"
+                    for n, d, c in _leg)
                 + "</div>", unsafe_allow_html=True)
 
 # ------------------------------------------------------------- By Product
@@ -790,7 +794,7 @@ with tab_prod:
             f"ARR {money(_arr)} · <span style='color:#B08480;font-weight:500'>at risk {money(_rk)}</span>"
             f" · {_pct:.0f}%</div>"
             "<div style='height:6px;border-radius:3px;background:#eef1f6;overflow:hidden;margin-top:12px'>"
-            f"<div style='width:{_v:.0f}%;height:100%;background:#EBB7A4'></div></div></div>")
+            f"<div style='width:{_v:.0f}%;height:100%;background:#FA582D'></div></div></div>")
     st.markdown(f"<div style='display:flex;gap:10px;margin-bottom:12px'>{_cards}</div>",
                 unsafe_allow_html=True)
 
