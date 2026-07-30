@@ -14,6 +14,7 @@ Run:
     pip install -r requirements.txt
     streamlit run app.py
 """
+import base64
 import os
 import pandas as pd
 import plotly.express as px
@@ -313,24 +314,26 @@ prev_m = month_opts[idx - 1] if idx >= 1 else None
 prevq_m = month_opts[idx - 3] if idx >= 3 else None
 
 _logo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "panw_logo.png")
-_h1, _h2, _h3 = st.columns([1, 5, 1], vertical_alignment="center")
-with _h1:
-    if os.path.exists(_logo):
-        st.image(_logo, width=170)
-    else:
-        st.markdown(
-            "<div style='line-height:1'>"
-            "<span style='font-weight:800;font-size:26px;color:#141414'>paloalto</span>"
-            "<span style='font-weight:800;font-size:26px;color:#FA582D'>°</span>"
-            "<div style='letter-spacing:4px;font-size:11px;color:#FA582D;font-weight:700'>NETWORKS</div>"
-            "</div>", unsafe_allow_html=True)
-with _h2:
-    st.title("Value Realization Score — Adoption Dashboard")
-with _h3:
-    st.markdown(f"<div style='text-align:right;color:#6b7690;font-size:13px'>as of "
-                f"<b style='color:#1b2338'>{pd.to_datetime(sel_month + '-01').strftime('%b %Y')}</b></div>",
-                unsafe_allow_html=True)
-st.caption("ARR-weighted blend of License Utilization · Feature Adoption · Sustained Usage · Time to Value")
+_logo_html = ""
+if os.path.exists(_logo):
+    with open(_logo, "rb") as _f:
+        _logo_b64 = base64.b64encode(_f.read()).decode()
+    _logo_html = (
+        f"<img src='data:image/png;base64,{_logo_b64}' style='width:150px'/>"
+        "<div style='width:1px;height:40px;background:#E3E1DA'></div>"
+    )
+st.markdown(
+    "<div style='display:flex;align-items:center;gap:18px'>"
+    + _logo_html +
+    "<div>"
+    "<div style='font-size:26px;font-weight:700;color:#1B2338;white-space:nowrap'>"
+    "Value Realization Score — Adoption Dashboard</div>"
+    "<div style='font-size:13px;color:#6B7690'>"
+    "ARR-weighted blend of License Utilization · Feature Adoption · Sustained Usage · Time to Value</div>"
+    "</div>"
+    f"<div style='margin-left:auto;text-align:right;color:#6B7690;font-size:13px;white-space:nowrap'>as of "
+    f"<b style='color:#1B2338'>{pd.to_datetime(sel_month + '-01').strftime('%b %Y')}</b></div>"
+    "</div>", unsafe_allow_html=True)
 
 PLAT_LABEL = {"hardware_ngfw": "Hardware NGFW", "software_ngfw": "Software NGFW",
               "sase": "SASE", "cloud_ngfw": "Cloud NGFW"}
