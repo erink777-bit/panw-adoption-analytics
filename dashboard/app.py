@@ -25,13 +25,10 @@ DATASET = "panw_adoption"
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 FQ = f"`{PROJECT}.{DATASET}"
 
-STATE_COLORS = {
-    "Value Realized": "#1E8E3E", "Developing": "#F9AB00", "Onboarding Stall": "#F9AB00",
-    "Shelfware Risk": "#E8710A", "Churn Signal": "#A8574E", "Lapsed": "#5F6368",
-    "At Risk": "#C77E76", "Critical": "#B36259", "Grace Period": "#9AA0A6",
-}
-STATE_ORDER = ["Value Realized", "Developing", "Grace Period", "Onboarding Stall",
-               "Shelfware Risk", "Churn Signal", "Lapsed", "At Risk", "Critical"]
+# displayed states are the four VRS bands (soft palette); operational states
+# (Shelfware Risk, Churn Signal, ...) remain in the data layer for play logic only
+STATE_COLORS = {"Value Realized": "#7CAE8A", "Developing": "#E7C878",
+                "At Risk": "#C77E76", "Critical": "#B36259"}
 
 PLAYS = [
     {"type": "state", "states": ["Shelfware Risk"], "play": "Activate", "owner": "Customer Success",
@@ -204,7 +201,7 @@ def vpct(x):   # a 0-100 VRS shown as a percent
 
 
 # red -> yellow -> green gradient for score cells (light tints, dark text)
-_GRAD_LO, _GRAD_MID, _GRAD_HI = (249, 228, 225), (251, 244, 224), (228, 240, 229)
+_GRAD_LO, _GRAD_MID, _GRAD_HI = (247, 231, 228), (252, 251, 247), (231, 241, 232)
 
 
 def _grad(t):
@@ -214,7 +211,7 @@ def _grad(t):
     else:
         u, a, b = (t - 0.5) / 0.5, _GRAD_MID, _GRAD_HI
     r, g, bl = (int(a[i] + (b[i] - a[i]) * u) for i in range(3))
-    return f"background-color: rgb({r},{g},{bl}); color: #141414"
+    return f"background-color: rgb({r},{g},{bl}); color: #3D465C"
 
 
 def _vrs_bg(v):
@@ -244,6 +241,24 @@ def _band_bg(v):
     if v in BAND_TINT:
         return f"background-color: {BAND_TINT[v]}; color: {BAND_TEXT[v]}; font-weight: 600"
     return ""
+
+
+def band_of(v):
+    """VRS band displayed as the customer/SKU state everywhere in the UI."""
+    return ("Value Realized" if v >= 70 else
+            "Developing" if v >= 50 else
+            "At Risk" if v >= 30 else "Critical")
+
+
+PLOTLY_CONFIG = {"displayModeBar": False}
+
+
+def dechrome(fig):
+    """Item 6: quiet chart chrome — white plot, no x gridlines, faint y gridlines."""
+    fig.update_layout(plot_bgcolor="#ffffff", paper_bgcolor="rgba(0,0,0,0)")
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(gridcolor="#eeeeee", zerolinecolor="#eeeeee")
+    return fig
 
 
 def style_scores(frame, vrs_cols=(), sig_cols=(), money_cols=()):
@@ -449,7 +464,7 @@ with tab_p:
         figt.update_layout(height=300, xaxis_type="category", yaxis_range=[0, 100],
                            yaxis_title="Portfolio VRS (%)", yaxis_ticksuffix="%", xaxis_title="",
                            margin=dict(t=10, b=10))
-        st.plotly_chart(figt, use_container_width=True)
+        st.plotly_chart(dechrome(figt), use_container_width=True, config=PLOTLY_CONFIG)
     with t2:
         st.markdown("**ARR by adoption state**")
         _BANDS = ["Value Realized", "Developing", "At Risk", "Critical"]
@@ -458,7 +473,7 @@ with tab_p:
         figb.update_layout(height=300, xaxis_type="category", yaxis_title="ARR ($)", xaxis_title="",
                            legend=dict(orientation="h", yanchor="top", y=-0.25, title=""),
                            margin=dict(t=10, b=10))
-        st.plotly_chart(figb, use_container_width=True)
+        st.plotly_chart(dechrome(figb), use_container_width=True, config=PLOTLY_CONFIG)
 
     # ---- Top movers this month ----
     st.markdown("**Top movers this month**")
@@ -476,9 +491,6 @@ with tab_p:
         mv = mv.reindex(mv["delta"].abs().sort_values(ascending=False).index).head(6)
 
 
-        def _band_of(v):
-            return "Value Realized" if v >= 70 else ("Developing" if v >= 50 else ("At Risk" if v >= 30 else "Critical"))
-
         def _play_of(cid):
             g = df[df["cust_id"] == cid]
             if g["state"].isin(["Churn Signal", "Lapsed"]).any():
@@ -491,7 +503,7 @@ with tab_p:
 
         _rows = ""
         for _, r in mv.iterrows():
-            band = _band_of(r["vrs"])
+            band = band_of(r["vrs"])
             pb, pc = BAND_TINT[band], BAND_TEXT[band]
             vcol = "#C0343A" if r["vrs"] < 50 else "#1b2338"
             dcol = BAD if r["delta"] < 0 else (GOOD if r["delta"] > 0 else FLAT)
@@ -610,17 +622,10 @@ with tab_c:
         "state": "State", "util_health": "License Utilization", "feature_adoption": "Feature adoption",
         "sustained_usage": "Sustained usage", "ttv_score": "Time to value", "arr": "ARR"})
     subd["Platform"] = subd["Platform"].map(PLAT_LABEL).fillna(subd["Platform"])
+    subd["State"] = subd["VRS"].apply(band_of)   # display the VRS band, not the raw state
     subd = subd.reset_index(drop=True)
-    _STATE_CSS = {
-        "Value Realized": f"background-color:{BAND_TINT['Value Realized']};color:{BAND_TEXT['Value Realized']};font-weight:600",
-        "Developing": f"background-color:{BAND_TINT['Developing']};color:{BAND_TEXT['Developing']};font-weight:600",
-        "At Risk": f"background-color:{BAND_TINT['At Risk']};color:{BAND_TEXT['At Risk']};font-weight:600",
-        "Critical": f"background-color:{BAND_TINT['Critical']};color:{BAND_TEXT['Critical']};font-weight:600",
-        "Shelfware Risk": f"background-color:{BAND_TINT['Critical']};color:{BAND_TEXT['Critical']};font-weight:600",
-        "Churn Signal": f"background-color:{BAND_TINT['Critical']};color:{BAND_TEXT['Critical']};font-weight:600",
-        "Lapsed": f"background-color:{BAND_TINT['Critical']};color:{BAND_TEXT['Critical']};font-weight:600",
-        "Onboarding Stall": f"background-color:{BAND_TINT['At Risk']};color:{BAND_TEXT['At Risk']};font-weight:600",
-        "Grace Period": "background-color:#EEF1F6;color:#57606F;font-weight:600"}
+    _STATE_CSS = {b: f"background-color:{BAND_TINT[b]};color:{BAND_TEXT[b]};font-weight:600"
+                  for b in BAND_TINT}
     stys = style_scores(subd, vrs_cols=["VRS"],
                         sig_cols=["License Utilization", "Feature adoption", "Sustained usage", "Time to value"],
                         money_cols=["ARR"])
@@ -645,9 +650,10 @@ with tab_c:
         figl.update_layout(title=dict(text=f"{prod_pick} — License Utilization by month",
                                       font=dict(size=15, color="#1b2338")),
                            height=300, xaxis_type="category",
+                           yaxis=dict(tickvals=[0, 0.5, 1.0, 1.2], range=[-0.05, 1.35]),
                            yaxis_title="License Utilization (consumed / licensed)",
                            xaxis_title="", margin=dict(t=40, b=10))
-        st.plotly_chart(figl, use_container_width=True)
+        st.plotly_chart(dechrome(figl), use_container_width=True, config=PLOTLY_CONFIG)
     with cc2:
         figv = px.line(ser, x="month", y="vrs", markers=True, color_discrete_sequence=["#FA582D"])
         figv.add_hline(y=50, line_dash="dot", line_color="#E8710A",
@@ -655,9 +661,10 @@ with tab_c:
         figv.update_layout(title=dict(text=f"{prod_pick} — VRS by month",
                                       font=dict(size=15, color="#1b2338")),
                            height=300, xaxis_type="category", yaxis_range=[0, 100],
+                           yaxis=dict(tickvals=[0, 25, 50, 75, 100]),
                            yaxis_title="VRS (%)", yaxis_ticksuffix="%", xaxis_title="",
                            margin=dict(t=40, b=10))
-        st.plotly_chart(figv, use_container_width=True)
+        st.plotly_chart(dechrome(figv), use_container_width=True, config=PLOTLY_CONFIG)
 
     st.markdown(f"**Feature detail — {prod_pick}**")
     st.caption("Each feature judged against its own expected monthly volume.")
@@ -784,11 +791,9 @@ with tab_prod:
         cc = cc.merge(anm, on="cust_id", how="left")
         cd = cc.rename(columns={"cust_name": "Customer", "segment": "Segment", "region": "Region"})[
             ["Customer", "Segment", "Region", "Anomaly", "VRS"] + _psig + ["ARR"]]
-        _ANOM_CSS = {
-            "Shelfware": "background-color:#F9E2DF;color:#B0433A;font-weight:600",
-            "Spike & drop": "background-color:#F9E2DF;color:#B0433A;font-weight:600",
-            "Overage (upsell)": "background-color:#F9EFD4;color:#8A6D1F;font-weight:600",
-            "Single Feature Flag": "background-color:#EEF1F6;color:#57606F;font-weight:600"}
+        _ANOM = "background-color:#F1F0EC;color:#5A6478;font-weight:600"   # neutral pill, no alarm colors
+        _ANOM_CSS = {k: _ANOM for k in
+                     ("Shelfware", "Spike & drop", "Overage (upsell)", "Single Feature Flag")}
         styc = style_scores(cd, vrs_cols=["VRS"], sig_cols=_psig, money_cols=["ARR"])
         styc = styc.map(lambda v: _ANOM_CSS.get(v, ""), subset=["Anomaly"])
         st.dataframe(styc, use_container_width=True, hide_index=True)
