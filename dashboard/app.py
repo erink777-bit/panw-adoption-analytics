@@ -470,7 +470,7 @@ with tab_p:
     cur_band = d_now.groupby("band")["arr"].sum().reindex(_BANDS).fillna(0)
     hist = bt.copy()
     hist["month"] = hist["month"].astype(str).str[:7]
-    piv = (hist.pivot_table(index="month", columns="band", values="arr", aggfunc="sum")
+    piv = (hist.pivot_table(index="month", columns="band", values="arr", aggfunc="sum", observed=False)
            .reindex(columns=_BANDS).fillna(0))
     shares = (piv.div(piv.sum(axis=1), axis=0) * 100).tail(12)
     sh_now = shares.loc[sel_month] if sel_month in shares.index else shares.iloc[-1]
@@ -576,6 +576,8 @@ with tab_p:
             mv = mv.reindex(mv["delta"].abs().sort_values(ascending=False).index)
             mv = pd.concat([mv[mv["_act"]], mv[~mv["_act"]]]).head(7)
 
+            if mv.empty:
+                st.info("No customers appear in both this month and last under the current filters.")
             _rows = ""
             for _, r in mv.iterrows():
                 band = band_of(r["vrs"])
@@ -593,9 +595,10 @@ with tab_p:
             _hdr = "".join(f"<th style='text-align:left;padding:8px 10px;color:#6B7690;font-size:12px;"
                            f"font-weight:600;border-bottom:1px solid #E3E1DA'>{h}</th>"
                            for h in ["Customer", "VRS", "Δ MoM", "ARR", "State", "Recommended play"])
-            st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
-                        f"<thead><tr>{_hdr}</tr></thead><tbody>{_rows}</tbody></table>",
-                        unsafe_allow_html=True)
+            if len(mv):
+                st.markdown(f"<table style='width:100%;border-collapse:collapse;font-size:13.5px'>"
+                            f"<thead><tr>{_hdr}</tr></thead><tbody>{_rows}</tbody></table>",
+                            unsafe_allow_html=True)
 
 
 # ------------------------------------------------------------- By Customer
@@ -658,8 +661,12 @@ with tab_c:
 
         _pids = pd.concat([risk_rows["cust_id"], exp_rows["cust_id"]]).unique()
         prow = cust[cust["cust_id"].isin(_pids)].copy()
-        prow[["Play", "Owner"]] = prow["cust_id"].apply(lambda c: pd.Series(_play_row(c)))
-        prow = prow.dropna(subset=["Play"])
+        if len(prow):
+            prow[["Play", "Owner"]] = prow["cust_id"].apply(lambda c: pd.Series(_play_row(c)))
+            prow = prow.dropna(subset=["Play"])
+        else:
+            prow["Play"] = pd.Series(dtype=object)
+            prow["Owner"] = pd.Series(dtype=object)
         if pchoice != "All":
             prow = prow[prow["Play"] == pchoice]
         prow = prow.sort_values(["ARRatrisk", "TotalARR"], ascending=False)
@@ -673,7 +680,10 @@ with tab_c:
         styw = styw.map(lambda v: _PLAY_CSS.get(v, ""), subset=["Play"])
         styw = styw.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Customer", "Segment", "Owner", "Total ARR"])
         styw = styw.map(lambda _v: "color:#B08480;font-weight:500", subset=["ARR at risk"])
-        st.dataframe(styw, width="stretch", hide_index=True)
+        if len(pdisp):
+            st.dataframe(styw, width="stretch", hide_index=True)
+        else:
+            st.info("No accounts need action under the current filters.")
 
     # ---- Drill into any customer ----
     with st.container(border=True):
@@ -766,10 +776,14 @@ with tab_c:
         styf = styf.map(lambda v: _ADOPT_CSS.get(v, ""), subset=["Adoption level"])
         styf = styf.map(lambda _v: "color:#3D465C;font-weight:500", subset=["Feature"])
         styf = styf.format({"Usage events": "{:,.0f}", "Score": "{:.0%}"}, na_rep="-")
-        st.dataframe(styf, width="stretch", hide_index=True,
-                     column_config={"Adoption level": st.column_config.Column(
-                         help="Score by monthly usage vs expected volume: not_enabled = 0 events → 0% · "
-                              "enabled_idle = under 20% → 30% · active = 20–80% → 70% · deep = 80%+ → 100%")})
+        if fdf.empty:
+            st.info("This SKU has no tracked features — its VRS is driven by "
+                    "License Utilization, Sustained Usage, and Time to Value.")
+        else:
+            st.dataframe(styf, width="stretch", hide_index=True,
+                         column_config={"Adoption level": st.column_config.Column(
+                             help="Score by monthly usage vs expected volume: not_enabled = 0 events → 0% · "
+                                  "enabled_idle = under 20% → 30% · active = 20–80% → 70% · deep = 80%+ → 100%")})
         _leg = [("not_enabled", "none", "#9AA0A6"),
                 ("enabled_idle", "under 20%", BAND_PLAIN["At Risk"]),
                 ("active", "20–80%", BAND_PLAIN["Developing"]),
