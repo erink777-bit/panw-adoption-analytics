@@ -48,13 +48,27 @@ st.set_page_config(page_title="VRS Adoption Dashboard", layout="wide")
 # ------------------------------------------------------------- data layer
 @st.cache_resource
 def detect_mode():
-    try:
+    """BigQuery if credentials work within 10s, else local CSVs.
+
+    The probe runs in a worker thread with a hard timeout: on hosts with no
+    Google credentials (e.g. Streamlit Community Cloud) the auth lookup can
+    stall for minutes, which would leave the app stuck on a spinner."""
+    import concurrent.futures
+
+    def _probe():
         from google.cloud import bigquery
         c = bigquery.Client(project=PROJECT)
         c.query("SELECT 1").result()
+        return c
+
+    ex = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    try:
+        c = ex.submit(_probe).result(timeout=10)
         return "bq", c
     except Exception:
         return "local", None
+    finally:
+        ex.shutdown(wait=False)
 
 
 MODE, _CLIENT = detect_mode()
