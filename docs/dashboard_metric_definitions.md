@@ -77,7 +77,11 @@ null and its 25% weight is likewise renormalized away (spec §4.2 graceful degra
 ### LUR (`lur`) — License Utilization Rate
 **Calculation:** `SUM(consumed_units) ÷ SUM(licensed_amount)` for that customer × product × month. The sums combine all **concurrently-active entitlements** (this resolves mid-year expansions — two overlapping contracts are summed, not double-counted). `licensed_amount` is a monthly entitlement quantity in the SKU's unit (credits / device-licenses / seats / usage-units).
 
-### state
+### state (internal — drives play assignment, not displayed)
+The dashboard displays the four **VRS bands** (Value Realized / Developing / At Risk / Critical)
+wherever a status is shown. The finer-grained pipeline states below are internal: their sole
+role in the dashboard is to assign each account a play in the By Customer tab
+(Shelfware Risk → Activate; Churn Signal or Lapsed → Win back; the expansion flag → Upsell).
 **What it is:** one mutually-exclusive label per SKU-month, resolved by a **priority ladder** (most specific / urgent first; first match wins):
 
 | Priority | state | Rule |
@@ -115,7 +119,7 @@ These catch a risk/opportunity the composite VRS and the state can mask:
 
 ### ARR at risk (`ARR_at_risk`)
 **Answers:** how many dollars are in genuinely troubled SKUs.
-**Calculation:** `Σ(arr WHERE VRS < 50)` — **SKU-level**: only the at-risk SKUs' ARR counts, so a customer with one weak SKU and three healthy ones contributes just the weak SKU's dollars. In the "At Risk" band or worse (aligned to the state bands). The KPI also shows it as a **% of Total ARR**.
+**Calculation:** `Σ(arr WHERE VRS < 50)` — **SKU-level**: only the at-risk SKUs' ARR counts, so a customer with one weak SKU and three healthy ones contributes just the weak SKU's dollars. In the "At Risk" band or worse (below VRS 50). The KPI also shows it as a **% of Total ARR**.
 
 ### Customers
 Distinct customer count in the filtered set.
@@ -127,8 +131,11 @@ Distinct customer count in the filtered set.
 ### SKUs at risk
 Count of SKU rows (customer × product) with `VRS < 50` in the filtered set. More granular than customers — healthy accounts can still carry an odd at-risk SKU.
 
-### ARR by state (chart + table)
-For the selected month, grouped by `state`: `Σ(arr)` (bar), plus a companion table with **SKUs** (row count) and **Customers** (distinct count) per state. A customer with SKUs in multiple states appears under each of those states.
+### ARR by VRS band ("Where the ARR sits today")
+For the selected month, `Σ(arr)` grouped by VRS band, shown as a 100% mix bar with a card per band:
+dollars, share of total ARR, share change vs. the prior quarter (in points), and a 12-month share
+sparkline. Band dollars reconcile with the headline KPIs: bands sum to Total ARR, and
+At Risk + Critical equals ARR at Risk.
 
 ### Portfolio VRS trend (chart)
 ARR-weighted VRS per month across the selected filters — the 12-month trajectory.

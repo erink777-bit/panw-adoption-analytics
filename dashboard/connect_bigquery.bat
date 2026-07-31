@@ -24,7 +24,7 @@ if errorlevel 1 (
 echo.
 echo  Connected. The dashboard will now use live BigQuery automatically.
 echo  Launching it now - check the sidebar badge: "BigQuery (live)"
-cd /d "%~dp0"
+cd /d "%~dp0.."
 python -m pip install -r requirements.txt --quiet --disable-pip-version-check
-python -m streamlit run app.py
+python -m streamlit run dashboard/app.py
 pause

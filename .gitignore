@@ -4,3 +4,5 @@ __pycache__/
 *.tmp
 .~lock.*
 push_to_github.bat
+docs/exec_deck_notes.md
+dashboard/.streamlit/

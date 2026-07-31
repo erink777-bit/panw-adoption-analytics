@@ -15,7 +15,7 @@ and 36 automated data-quality tests enforce it against a live BigQuery instance.
 | `/specs` | The Markdown product & technical specification (`product_and_technical_spec.md`): the North Star formula, component definitions, thresholds, state machine, edge-case handling, and open decisions for leadership. |
 | `/pipeline_and_tests` | The metric pipeline and its tests. `models/` holds dbt-style BigQuery SQL (2 staging views → 1 intermediate view → 4 marts). `tests/dq_tests.sql` is the 36-assertion data-quality harness (unit, data quality, schema, source-to-target integrity, regression checksums, freshness, anomaly detection, false-positive checks); `tests/run_tests.py` executes it against BigQuery, adds a non-fatal cross-environment parity check against the offline CSV build, and exits non-zero on any failure. |
 | `/dashboard` | The Streamlit visualization prototype (`app.py`): Portfolio, By Product, and By Customer views over the VRS marts. Runs live against BigQuery or fully offline from bundled CSVs — identical numbers either way. |
-| `/docs` | Supporting documentation: per-metric definitions for every number on the dashboard, the pipeline lineage diagram (SVG), and executive-deck notes with independently verified figures. |
+| `/docs` | Supporting documentation: per-metric definitions for every number on the dashboard, and the pipeline lineage diagram (SVG). |
 | `executive_presentation.pptx / .pdf` | The executive presentation (Palo Alto Networks corporate template). |
 
 ## Running the Dashboard Locally
@@ -37,8 +37,8 @@ python -m streamlit run app.py
 The app is BigQuery-first: on startup it connects live to
 `panw-502122.panw_adoption` and queries the marts directly. If no Google
 credentials are present it falls back to `dashboard/data/*.csv` — offline
-exports of the same marts, verified identical — so reviewers can run it with
-zero cloud setup. A sidebar badge shows the active mode.
+exports of the same marts, verified identical — so it runs with no cloud
+configuration. A sidebar badge shows the active mode.
 
 **To enable the live BigQuery connection (one-time):** double-click
 `dashboard/connect_bigquery.bat`. It installs the Google Cloud SDK if needed,

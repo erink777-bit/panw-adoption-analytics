@@ -1,52 +1,61 @@
 # Dashboard
 
-A lightweight Streamlit app over the VRS marts — lets an exec view adoption performance by
-**Customer** and by **Product**, with portfolio VRS and dollars-at-risk headlined.
+Streamlit application over the VRS marts: portfolio health, product performance, and
+customer-level drill-downs. Every roll-up is ARR-weighted to match the pipeline
+(`SUM(vrs × arr) / SUM(arr)`).
 
-## Two data modes (auto-detected)
+## Hosted version
 
-- **BigQuery (live):** if Google credentials are available, it queries `panw-502122.panw_adoption`.
-- **Local (offline):** otherwise it reads `data/*.csv` — **no cloud auth needed.** The sidebar
-  shows which mode is active. The offline CSVs are pre-built and committed, so the app runs
-  out of the box.
+A hosted instance runs at https://panw-adoption-analytics.streamlit.app — no installation required.
 
-## Run
+## Data modes (auto-detected)
 
-Install deps and launch (run the lines **separately** — Windows PowerShell doesn't support `&&`):
+- **BigQuery (live):** when Google credentials are present, the app queries
+  `panw-502122.panw_adoption` directly.
+- **Local (offline):** otherwise it reads the pre-built `data/*.csv` exports committed with the
+  repository — verified identical to the BigQuery marts. The sidebar badge shows the active mode.
 
-```powershell
-cd dashboard
+## Running locally
+
+Requires Python 3.10+ (https://www.python.org/downloads/ — on Windows, select
+"Add python.exe to PATH" during installation).
+
+**Windows:** double-click `run_dashboard.bat`. It installs requirements on the first run and opens
+the app at http://localhost:8501.
+
+**Any platform:**
+
+```bash
 pip install -r requirements.txt
-streamlit run app.py
+streamlit run dashboard/app.py
 ```
 
-That's it — it opens in your browser and runs in offline mode with no login. It will *automatically*
-switch to live BigQuery if you later set up credentials (`gcloud auth application-default login`,
-or point `GOOGLE_APPLICATION_CREDENTIALS` at a service-account key). No code change needed.
+**Live BigQuery connection (one-time):** run `connect_bigquery.bat`, or
+`gcloud auth application-default login`. The app switches to live mode automatically once
+credentials are available; no code change is required.
 
-To regenerate the offline CSVs from the raw data (only needed if the data changes):
+**Regenerating the offline CSVs** (only needed if the raw data changes):
 
-```powershell
+```bash
 pip install duckdb
-python build_local_data.py
+python dashboard/build_local_data.py
 ```
 
 ## Layout
 
-**Sidebar filters:** month (defaults to latest), segment, region, product platform; plus a data-source badge.
+**Sidebar filters:** as-of month (defaults to the latest), segment, region, and product platform.
+An empty filter applies no restriction. A badge shows the active data source.
 
-**▶ Actions tab** (landing tab — the action-oriented view): every state/flag rendered as a **play** with
-an owner, a recommended action, ARR at stake, and an ARR-prioritized account worklist. Headline metrics:
-ARR to defend, ARR to expand, accounts needing action. Plays: Save (Churn), Activate (Shelfware),
-Win back (Lapsed), Deploy (Onboarding Stall), Upsell (overage flag), Broaden adoption (single-feature flag).
+**Portfolio:** headline cards (Portfolio VRS gauge with MoM/QoQ change, Total ARR, ARR at Risk,
+Customers at Risk, Expansion ARR); the VRS band key; a 12-month VRS trend; "Where the ARR sits
+today" — the current ARR mix across VRS bands with quarter-over-quarter share changes and 12-month
+share sparklines; and Top movers — the largest month-over-month VRS changes, actionable accounts
+first, each with a recommended play.
 
-**Portfolio tab**: portfolio VRS (ARR-weighted), total ARR, ARR-at-risk (VRS < 50) with %, customers,
-customers-at-risk, SKUs-at-risk; a **KPI movement** table (each KPI vs last month and last quarter);
-ARR-by-state bar + table (ARR / SKUs / customers per state); portfolio VRS trend over 12 months.
+**By Product:** platform summary cards (VRS, ARR, ARR at risk); a products table filterable by
+platform, sorted by ARR at risk, with inline anomaly counts; selecting a row opens that product's
+customer list, worst VRS first.
 
-**By Customer tab:** leaderboard sorted by dollars-at-risk (worst first) → drill into a customer's
-SKUs → feature-level detail for a SKU.
-
-**By Product tab:** VRS by platform (the product-GM view) + top individual products by dollars-at-risk.
-
-All roll-ups are ARR-weighted, matching the pipeline (`SUM(vrs*arr)/SUM(arr)`).
+**By Customer:** ARR at Risk, Expansion ARR, and Accounts Needing Action; a Recommended plays table
+(Activate / Win back / Upsell, each with an owner, filterable by play); and a customer drill-down
+with per-product License Utilization and VRS trajectories plus feature-level detail.
